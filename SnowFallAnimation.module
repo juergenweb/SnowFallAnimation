@@ -76,8 +76,6 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
         if ($this->input_end) $this->dateEnd = new DateTime(date('Y-m-d', $this->input_end));
         $this->today = new DateTime('today');
 
-
-
     }
 
     /**
@@ -90,8 +88,7 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
         $this->addHookAfter('Page::render', $this, 'addScript', ['priority' => 202]); // add snowfall scripts to the frontend
         $this->addHookBefore('Modules::saveConfig', $this, 'validateDates', ['priority' => 200]); // validate if end date is after start date
         $this->addHookBefore('Inputfield::render', $this, 'openFieldset', ['priority' => 203]); // open the fieldset if there is an error in the children fields
-        $this->addHookAfter('LazyCron::everyMinute', $this, 'generateDates', ['priority' => 201]); // save the dates for the next year to the database
-
+        $this->addHookAfter('LazyCron::everyDay', $this, 'generateDates', ['priority' => 201]); // save the dates for the next year to the database
     }
 
     /**
@@ -247,7 +244,7 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
      */
     protected function checkInRange(): bool
     {
-        if($this->dateStart && $this->dateEnd) {
+        if ($this->dateStart && $this->dateEnd) {
             return ($this->today >= $this->dateStart && $this->today < $this->dateEnd);
         }
         return true;
@@ -296,7 +293,7 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
                 break;
             case 2:
                 // both dates
-                if($this->dateEnd){
+                if ($this->dateEnd) {
                     if ($this->checkInRange()) {
                         $class = 'active';
                         $content = sprintf($this->_('At the moment the snowfall is enabled. It will be disabled on %s.'), $this->dateEnd->format($this->dateFormat));
@@ -308,7 +305,7 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
                             if ($this->dateStart > $this->today) {
                                 $content = sprintf($this->_('At the moment the snowfall is disabled. It will be enabled on %s automatically.'), $this->dateStart->format($this->dateFormat));
                             }
-                            if($this->dateEnd <= $this->today){
+                            if ($this->dateEnd <= $this->today) {
                                 $content = $this->_('At the moment the snowfall is disabled.');
                             }
                         }
@@ -323,8 +320,6 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
                         $class = 'inactive';
                     }
                 }
-
-
                 break;
             default:
                 $class = 'inactive';
