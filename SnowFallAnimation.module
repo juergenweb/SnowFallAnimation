@@ -1,0 +1,508 @@
+<?php
+declare(strict_types=1);
+
+namespace ProcessWire;
+
+/*
+ * SnowFallAnimation module for ProcessWire for creating and animating snowflakes on a web page using HTML5 canvas and JavaScript classes
+ * The Javascript for the snowflakes has been written by Andrey Yurkewich (https://github.com/Andrey-1988-dev/snowfall-js)
+ *
+ * Created by Jürgen Kern
+ * https://github.com/juergenweb
+ * File name: SnowfallAnimation.module
+ * Created: 16.11.2025
+ */
+
+use DateMalformedStringException;
+use DateTime;
+use DateInterval;
+
+class SnowFallAnimation extends WireData implements Module, ConfigurableModule
+{
+
+    protected int $input_count = 500;
+    protected int $input_minRadius = 10;
+    protected int $input_maxRadius = 30;
+    protected int $input_minSpeed = 1;
+    protected int $input_maxSpeed = 3;
+    protected string $input_text = '❄';
+    protected string $input_color = '#99ccff';
+    protected string $input_zIndex = '1000';
+    protected string $input_visibility = '0';
+    protected string|int $input_start = '';
+    protected string|int $input_end = '';
+    protected int|bool|string $input_recurrence = 0;
+    protected array $moduleConfig = [];
+    protected string $dateFormat = '';
+    protected DateTime|null $dateStart = null;
+    protected DateTime|null $dateEnd = null;
+    protected DateTime $today;
+
+    /**
+     * Get all metadata for the module
+     * @return array
+     */
+    public static function getModuleInfo(): array
+    {
+        return [
+            'title' => 'SnowFallAnimation',
+            'summary' => 'Module for creating and animating snowflakes on a web page using HTML5 canvas and JavaScript classes.',
+            'author' => "Jürgen Kern",
+            'href' => 'https://github.com/juergenweb/SnowFallAnimation',
+            'version' => '1.0.0',
+            'singular' => true,
+            'autoload' => true,
+            'requires' => ['PHP>=8.0.0', 'ProcessWire>=3.0.181', 'LazyCron']
+        ];
+    }
+
+    /**
+     * @throws DateMalformedStringException
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // grab the config data from the database and create a property for each config setting
+        $this->moduleConfig = $this->wire('modules')->getConfig($this);
+        if ($this->moduleConfig) {
+            foreach ($this->moduleConfig as $name => $value) {
+                $this->{$name} = $value;
+            }
+        }
+
+        // create datetime objects of start date, end date and the current date
+        if ($this->input_start) $this->dateStart = new DateTime(date('Y-m-d', $this->input_start));
+        if ($this->input_end) $this->dateEnd = new DateTime(date('Y-m-d', $this->input_end));
+        $this->today = new DateTime('today');
+
+
+
+    }
+
+    /**
+     * Method which runs before the render method
+     * @return void
+     */
+    public function init(): void
+    {
+        $this->dateFormat = $this->_('Y-m-d'); // the default date format
+        $this->addHookAfter('Page::render', $this, 'addScript', ['priority' => 202]); // add snowfall scripts to the frontend
+        $this->addHookBefore('Modules::saveConfig', $this, 'validateDates', ['priority' => 200]); // validate if end date is after start date
+        $this->addHookBefore('Inputfield::render', $this, 'openFieldset', ['priority' => 203]); // open the fieldset if there is an error in the children fields
+        $this->addHookAfter('LazyCron::everyMinute', $this, 'generateDates', ['priority' => 201]); // save the dates for the next year to the database
+
+    }
+
+    /**
+     * Add the JavaScript to the page
+     * @param HookEvent $event
+     * @return void
+     */
+    protected function addScript(HookEvent $event): void
+    {
+        $page = $event->object;
+
+        // don't add this to the admin pages
+        if ($page->template->name === 'admin') return;
+
+        $version = $this->getModuleInfo()['version'];
+
+        $script = '<script src="' . $this->wire('config')->urls->$this . 'snowfall.js?v=' . $version . '"></script>' . PHP_EOL;
+
+        //This is the default config data as set inside the snowfall.js
+        $defaultData = [
+            'count' => 100, // number of snowflakes
+            'minRadius' => 10, // minimum radius of a snowflake in pixels
+            'maxRadius' => 30, // maximum radius of a snowflake in pixels
+            'minSpeed' => 3, // minimum speed of a snowflake in pixels per frame
+            'maxSpeed' => 10, // maximum speed of a snowflake in pixels per frame
+            'text' => "❄", // text for a snowflake (can be any symbol or text)
+            'color' => "#99ccff", // color of a snowflake in HEX format
+            'zIndex' => "1000" // z-index for the snowflakes canvas
+        ];
+
+        $configData = [
+            'count' => $this->input_count, // number of snowflakes
+            'minRadius' => $this->input_minRadius, // minimum radius of a snowflake in pixels
+            'maxRadius' => $this->input_maxRadius, // maximum radius of a snowflake in pixels
+            'minSpeed' => $this->input_minSpeed, // minimum speed of a snowflake in pixels per frame
+            'maxSpeed' => $this->input_maxSpeed, // maximum speed of a snowflake in pixels per frame
+            'text' => $this->input_text, // text for a snowflake (can be any symbol or text)
+            'color' => $this->input_color, // color of a snowflake in HEX format
+            'zIndex' => $this->input_zIndex // z-index for the snowflakes canvas
+        ];
+
+        // compare default and custom settings
+        $diffData = array_diff_assoc($configData, $defaultData);
+        $configValues = $diffData ? json_encode($diffData) : '';
+        $script .= '<script>let snowfall = new Snowfall(' . $configValues . ')</script>';
+
+        // check if script should be embedded or not
+        $visibility = intval($this->input_visibility);
+        if ($visibility > 0) {
+            $show = $visibility === 1 || $this->checkInRange();
+            if ($show) {
+                $event->return = str_replace('</body>', $script . PHP_EOL . '</body>', $event->return);
+            }
+        }
+
+    }
+
+    /**
+     * Method to add some custom validation rules
+     * @param HookEvent $event
+     * @return void
+     * @throws DateMalformedStringException
+     */
+    protected function validateDates(HookEvent $event): void
+    {
+
+        // Get values of arguments sent to hook (and optionally modify them)
+        $class = $event->arguments(0);
+        $data = $event->arguments(1);
+
+        // run only on this module
+        if ($class != 'SnowFallAnimation') return;
+
+        if (intval($data['input_start']) && intval($data['input_end'])) {
+
+            $dateStart = new DateTime(date('Y-m-d', $data['input_start']));
+            $dateEnd = new DateTime(date('Y-m-d', $data['input_end']));
+            $today = new DateTime('today');
+
+            // create the wrapper instance
+            $wrap = new InputfieldWrapper;
+            $this->getModuleConfigInputfields($wrap);
+
+            // 1) check if start date is before end date
+            if ($dateStart > $dateEnd) {
+
+                // output an error
+                $field = $wrap->get('input_end');
+                $field->error($this->_('The end date must be after the start date.'));
+                $this->wire('session')->set('snowfalldateserror', 1);
+                return;
+            }
+
+            // 2) check if end date is in the past
+            if ($dateEnd < $today) {
+                $field = $wrap->get('input_end');
+                $field->error($this->_('The end date must be in the future not in the past.'));
+                $this->wire('session')->set('snowfalldateserror', 1);
+                return;
+            }
+
+            // check if date range is more than 1 year
+            if ($this->input_recurrence === 1) {
+
+                $diff = $dateStart->diff($dateEnd);
+                $years = intval($diff->format('%y'));
+
+                if ($years) {
+                    $field = $wrap->get('input_end');
+                    $field->error($this->_('The difference between the start and end dates must be less than 1 year if you have recurrence enabled each year.'));
+                    $this->wire('session')->set('snowfalldateserror', 1);
+                }
+
+            }
+        } else {
+
+            // uncheck recurring checkbox if it is marked, but there are not both dates (start and end) present
+            $data['input_recurrence'] = 0;
+            $event->arguments(1, $data);
+        }
+
+    }
+
+    /**
+     * Method to save the start and end time for the next year if the end time is already in the past.
+     * @return void
+     * @throws DateMalformedStringException
+     */
+    protected function generateDates(): void
+    {
+        // do not run if there was an error
+        if ($this->wire('session')->get('snowfalldateserror')) return;
+
+        //check if end date is in the past if repeating dates is set to true
+        if ($this->input_recurrence === 1 && ($this->dateEnd <= $this->today)) {
+
+            // add plus 1 year to start and end date and save it back to the database
+            $newDateStart = $this->dateStart->add(new DateInterval('P1Y'));
+            $newDateEnd = $this->dateEnd->add(new DateInterval('P1Y'));
+
+            // save the new dates to the database
+            $this->moduleConfig['input_start'] = $newDateStart->getTimestamp();
+            $this->moduleConfig['input_end'] = $newDateEnd->getTimestamp();
+            wire('modules')->saveConfig($this, $this->moduleConfig);
+
+        }
+
+    }
+
+    /**
+     * Check if the current date is between the start and end date
+     * @return bool
+     */
+    protected function checkInRange(): bool
+    {
+        if($this->dateStart && $this->dateEnd) {
+            return ($this->today >= $this->dateStart && $this->today < $this->dateEnd);
+        }
+        return true;
+    }
+
+    /**
+     * Open the visibility fieldset if there was an error inside a child field
+     * @param HookEvent $event
+     * @return void
+     */
+    protected function openFieldset(HookEvent $event): void
+    {
+
+        // check if we are on the SnowfallAnimation module configuration page
+        $moduleName = $this->wire('input')->get('name');
+        if ($moduleName !== 'SnowFallAnimation') return;
+
+        // run only on fieldset 1
+        $inputfield = $event->object;
+        if ($inputfield->className() !== 'InputfieldFieldset' && $inputfield->name !== 'fieldset1') return;
+
+        if ($this->wire('session')->get('snowfalldateserror')) {
+            $inputfield->collapsed = Inputfield::collapsedNo;
+            $this->wire('session')->remove('snowfalldateserror');
+        }
+    }
+
+    /**
+     * Module config
+     * @param InputfieldWrapper $inputfields
+     * @throws WireException
+     * @throws WirePermissionException
+     */
+    public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
+    {
+
+        // Markup element to indicate whether the snowfall is active or not
+        $markup = $this->wire('modules')->get('InputfieldMarkup');
+
+        $content = '';
+
+        switch ($this->input_visibility) {
+            case 1:
+                $content = $this->_('At the moment the snowfall is enabled.');
+                $class = 'active';
+                break;
+            case 2:
+                // both dates
+                if($this->dateEnd){
+                    if ($this->checkInRange()) {
+                        $class = 'active';
+                        $content = sprintf($this->_('At the moment the snowfall is enabled. It will be disabled on %s.'), $this->dateEnd->format($this->dateFormat));
+                    } else {
+                        $class = 'inactive';
+                        if ($this->wire('session')->get('snowfalldateserror')) {
+                            $content = $this->_('The snowfall is disabled, because you have errors in your settings.');
+                        } else {
+                            if ($this->dateStart > $this->today) {
+                                $content = sprintf($this->_('At the moment the snowfall is disabled. It will be enabled on %s automatically.'), $this->dateStart->format($this->dateFormat));
+                            }
+                            if($this->dateEnd <= $this->today){
+                                $content = $this->_('At the moment the snowfall is disabled.');
+                            }
+                        }
+                    }
+                } else {
+                    // only start date
+                    if ($this->dateStart <= $this->today) {
+                        $content = $this->_('At the moment the snowfall is enabled.');
+                        $class = 'active';
+                    } else {
+                        $content = sprintf($this->_('At the moment the snowfall is disabled. It will be enabled on %s automatically.'), $this->dateStart->format($this->dateFormat));
+                        $class = 'inactive';
+                    }
+                }
+
+
+                break;
+            default:
+                $class = 'inactive';
+                $content = $this->_('At the moment the snowfall is disabled.');
+        }
+
+        if ($class === 'active') {
+            $icon = '<i class="fa fa-fw fa-check-circle"></i>';
+        } else {
+            $icon = '<i class="fa fa-fw fa-times-circle"></i>';
+        }
+        $markup->addClass('uk-padding-small uk-text-large');
+        $markup->markupText('<p class="snowfall-state ' . $class . '">' . $icon . $content . '</p>');
+        if ($content != '') {
+            $inputfields->add($markup);
+        }
+
+        $fieldset1 = $this->wire('modules')->get('InputfieldFieldset');
+        $fieldset1->label = $this->_('Activation/deactivation of the snowfall');
+        $fieldset1->icon = 'fa-calendar';
+        $fieldset1->description = $this->_('Activate/deactivate snowfall on the webpage.');
+        $fieldset1->collapsed = Inputfield::collapsedYes;
+
+        // Enable/disable the snowfall
+        $visibility = $this->wire('modules')->get('InputfieldSelect');
+        $visibility->attr('name', 'input_visibility');
+        $visibility->label = $this->_('Enable/disable the snowfall');
+        $visibility->description = $this->_('Enable/disable the snowfall manually or by date.');
+        $options = [
+            $this->_('Off'),
+            $this->_('On'),
+            $this->_('Enable/disable per date')
+        ];
+        $visibility->addOptions($options);
+        $visibility->attr('value', $this->input_visibility);
+        $visibility->required = 1;
+        $fieldset1->add($visibility);
+
+        // set the start date for the snowfall
+        $start = $this->wire('modules')->get('InputfieldDatetime');
+        $start->label = $this->_('Start date for the snowfall');
+        $start->description = $this->_('Enter the date on which you want the snowfall to begin.');
+        $start->attr('name', 'input_start');
+        $start->datepicker = InputfieldDatetime::datepickerFocus;
+        $start->columnWidth = 50;
+        $start->dateInputFormat = $this->dateFormat;
+        $start->showIf = 'input_visibility=2';
+        $start->requiredIf = 'input_visibility=2';
+        $start->attr('value', $this->input_start);
+        $fieldset1->add($start);
+
+        // set the end date for the snowfall
+        $end = $this->wire('modules')->get('InputfieldDatetime');
+        $end->label = $this->_('End date for the snowfall');
+        $end->description = $this->_('Enter the date on which you want the snowfall to end.');
+        $end->attr('name', 'input_end');
+        $end->datepicker = InputfieldDatetime::datepickerFocus;
+        $end->columnWidth = 50;
+        $end->dateInputFormat = $this->dateFormat;
+        $end->attr('value', $this->input_end);
+        $end->showIf = 'input_visibility=2';
+        $end->requiredIf = 'input_visibility=2';
+        $fieldset1->add($end);
+
+        // set the end date for the snowfall
+        $recurrence = $this->wire('modules')->get('InputfieldCheckbox');
+        $recurrence->label = $this->_('Use these date settings (day and month) every year');
+        $recurrence->description = $this->_('If you check the box, snowfall will be automatically activated and disabled on the specified days and months each year.');
+        $recurrence->notes = $this->_('In this case, the snowfall begins and ends every year on the previously determined day and month.');
+        $recurrence->attr('name', 'input_recurrence');
+        $recurrence->showIf = "input_visibility=2,input_end!=''";
+        $recurrence->attr('value', $this->input_recurrence);
+        $recurrence->attr('checked', $this->input_recurrence ? 'checked' : '');
+        $fieldset1->add($recurrence);
+
+        $inputfields->add($fieldset1);
+
+        $fieldset2 = $this->wire('modules')->get('InputfieldFieldset');
+        $fieldset2->label = $this->_('Styling and settings for the snowflakes');
+        $fieldset2->icon = 'fa-cog';
+        $fieldset2->description = $this->_('Make your global settings for the output of the snowflakes.');
+        $fieldset2->collapsed = 1;
+
+        // set the number of snowflakes
+        $count = $this->wire('modules')->get('InputfieldInteger');
+        $count->label = $this->_('Number of snowflakes');
+        $count->description = $this->_('The number of snowflakes that are rendered on the page at any given time.');
+        $count->notes = $this->_('Default value is 500.');
+        $count->attr('name', 'input_count');
+        $count->attr('type', 'number');
+        $count->attr('value', $this->input_count);
+        $count->attr('min', 0);
+        $count->required = 1;
+        $fieldset2->add($count);
+
+        // set the min size for the snowflakes
+        $minRadius = $this->wire('modules')->get('InputfieldInteger');
+        $minRadius->label = $this->_('Minimum size of the snowflakes in px');
+        $minRadius->description = $this->_('Determine the minimum size of the snowflakes.');
+        $minRadius->notes = $this->_('Default value is 10 px.');
+        $minRadius->attr('name', 'input_minRadius');
+        $minRadius->attr('type', 'number');
+        $minRadius->attr('value', $this->input_minRadius);
+        $minRadius->attr('min', 1);
+        $minRadius->required = 1;
+        $fieldset2->add($minRadius);
+
+        // set the min size for the snowflakes
+        $maxRadius = $this->wire('modules')->get('InputfieldInteger');
+        $maxRadius->label = $this->_('Maximum size of the snowflakes in px');
+        $maxRadius->description = $this->_('Determine the maximum size of the snowflakes.');
+        $maxRadius->notes = $this->_('Default value is 30 px.');
+        $maxRadius->attr('name', 'input_maxRadius');
+        $maxRadius->attr('type', 'number');
+        $maxRadius->attr('value', $this->input_maxRadius);
+        $maxRadius->attr('min', 1);
+        $maxRadius->required = 1;
+        $fieldset2->add($maxRadius);
+
+        // set the min speed for the snowflakes
+        $minSpeed = $this->wire('modules')->get('InputfieldInteger');
+        $minSpeed->label = $this->_('Minimum speed of snowflakes falling');
+        $minSpeed->description = $this->_('Determine the minimum speed at how fast the snowflakes dwindle down.');
+        $minSpeed->notes = $this->_('This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 1.');
+        $minSpeed->attr('name', 'input_minSpeed');
+        $minSpeed->attr('type', 'number');
+        $minSpeed->attr('value', $this->input_minSpeed);
+        $minSpeed->attr('min', 1);
+        $minSpeed->required = 1;
+        $fieldset2->add($minSpeed);
+
+        // set the max speed for the snowflakes
+        $maxSpeed = $this->wire('modules')->get('InputfieldInteger');
+        $maxSpeed->label = $this->_('Maximum speed of snowflakes falling');
+        $maxSpeed->description = $this->_('Determine the maximum speed at how fast the snowflakes dwindle down.');
+        $maxSpeed->notes = $this->_('This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 3.');
+        $maxSpeed->attr('name', 'input_maxSpeed');
+        $maxSpeed->attr('type', 'number');
+        $maxSpeed->attr('value', $this->input_maxSpeed);
+        $maxSpeed->attr('min', 1);
+        $maxSpeed->required = 1;
+        $fieldset2->add($maxSpeed);
+
+        // set the text for the snowflakes
+        $text = $this->wire('modules')->get('InputfieldText');
+        $text->label = $this->_('Text for a snowflake');
+        $text->description = $this->_('This can be any symbol or text.');
+        $text->notes = $this->_('Default value is ❄.');
+        $text->attr('name', 'input_text');
+        $text->attr('type', 'text');
+        $text->attr('value', $this->input_text);
+        $text->required = 1;
+        $fieldset2->add($text);
+
+        // set the color for the snowflakes
+        $color = $this->wire('modules')->get('InputfieldText');
+        $color->label = $this->_('Color of a snowflake');
+        $color->description = $this->_('Enter the color of the snowflakes in HEX format.');
+        $color->notes = $this->_('Default value is #99ccff.');
+        $color->attr('name', 'input_color');
+        $color->attr('type', 'text');
+        $color->attr('value', $this->input_color);
+        $color->required = 1;
+        $fieldset2->add($color);
+
+        // set the z-index for the snowflakes
+        $zIndex = $this->wire('modules')->get('InputfieldText');
+        $zIndex->label = $this->_('Z-Index for the snowflakes');
+        $zIndex->description = $this->_('Change the Z-Index for the snowflakes if necessary.');
+        $zIndex->notes = $this->_('Change this value if you have problems displaying the snowflakes. Default is 1000.');
+        $zIndex->attr('name', 'input_zIndex');
+        $zIndex->attr('type', 'text');
+        $zIndex->attr('value', $this->input_zIndex);
+        $zIndex->required = 1;
+        $fieldset2->add($text);
+
+        $inputfields->add($fieldset2);
+
+    }
+
+}

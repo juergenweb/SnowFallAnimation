@@ -1,0 +1,153 @@
+{
+    "file": "site\/modules\/SnowFallAnimation\/SnowFallAnimation.module",
+    "textdomain": "site--modules--snowfallanimation--snowfallanimation-module",
+    "translations": {
+        "0edf14887ad35145d302952c89b65b4b": {
+            "text": "Das Enddatum muss nach dem Startdatum liegen."
+        },
+        "d908c765c46892d84f29a0e54481f895": {
+            "text": "Das Enddatum muss in der Zukunft liegen, nicht in der Vergangenheit."
+        },
+        "de99d5e84f98b1627071b43d4c875fd3": {
+            "text": "Im Moment ist der Schneefall aktiviert."
+        },
+        "7c467a8b02abafd070f8073e7132030e": {
+            "text": "Im Moment ist der Schneefall aktiviert. Er wird aber am %s deaktiviert."
+        },
+        "cd7eba45e2e8b12505742121f6338955": {
+            "text": "Im Moment ist der Schneefall deaktiviert. Es wird aber automatisch am %s aktiviert."
+        },
+        "27a89505baed7d2e4902af82907f13da": {
+            "text": "Im Moment ist der Schneefall deaktiviert."
+        },
+        "8dff19ba209044be653dd242b88ccead": {
+            "text": "Schneefall auf der Webseite aktivieren\/deaktivieren."
+        },
+        "368649e9a0ca3787feacd1be4d3250f1": {
+            "text": "Schneefall aktivieren\/deaktivieren"
+        },
+        "ebe5dadca9e2a8607a424f7a96435e54": {
+            "text": "Aktivieren oder deaktivieren Sie den Schneefall manuell oder per Datum."
+        },
+        "d15305d7a4e34e02489c74a5ef542f36": {
+            "text": "Aus"
+        },
+        "521c36a31c2762741cf0f8890cbe05e3": {
+            "text": "An"
+        },
+        "58568913b3e0e100f7ca891eb4057622": {
+            "text": "Aktivieren\/deaktivieren per Datum"
+        },
+        "1897c3b8cca1f6042a565088c0d5dc5f": {
+            "text": "Startdatum f\u00fcr den Schneefall"
+        },
+        "969e921081cfe6d56d3a2eda1273c91a": {
+            "text": "Geben Sie das Datum ein, an dem der Schneefall beginnen soll."
+        },
+        "db60641143ce4fb6714f3c26971642c4": {
+            "text": "Enddatum f\u00fcr den Schneefall"
+        },
+        "df2dfcb12e093a99b8f5248f9fb3ea35": {
+            "text": "Geben Sie das Datum ein, an dem der Schneefall enden soll."
+        },
+        "14fdc176b9012756aa0eb65ac1cd0c1d": {
+            "text": "Diese Datums-Einstellungen (Tag und Monat) jedes Jahr verwenden"
+        },
+        "006c2f845993774cfe8d3c3fe477d4b6": {
+            "text": "Wenn Sie das K\u00e4stchen ankreuzen, wird der Schneefall an den angegebenen Tagen und Monaten jeden Jahres automatisch aktiviert und auch wieder deaktiviert."
+        },
+        "7b827f3f29f0877fde6d9f80c26eb43e": {
+            "text": "In diesem Fall beginnt und endet der Schneefall jedes Jahr am jeweiligen zuvor festgelegten Tag und Monat."
+        },
+        "2efd404741a9ce366668c203531cec37": {
+            "text": "Styling und Einstellungen f\u00fcr die Schneeflocken"
+        },
+        "1bbf51b20b29b63d66f0ef091f1b18d7": {
+            "text": "Setze Sie Ihre globalen Einstellungen f\u00fcr die Ausgabe der Schneeflocken."
+        },
+        "be62aa503c80d9a2f220778a91c38ff0": {
+            "text": "Anzahl der Schneeflocken"
+        },
+        "aeee4a2d6267729453a3850dc97eed84": {
+            "text": "Die Anzahl der Schneeflocken, die zu einem bestimmten Zeitpunkt auf der Seite angezeigt werden."
+        },
+        "8f656f21f2f2d71b8f0cb10bbb626123": {
+            "text": "Der Standardwert betr\u00e4gt 500."
+        },
+        "9118f7fe47a71285e8f2be0b71f36d75": {
+            "text": "Bestimmen Sie die Mindestgr\u00f6\u00dfe der Schneeflocken."
+        },
+        "01210c41d87e6a6662f40424ba16960f": {
+            "text": "Bestimme Sie die maximale Gr\u00f6\u00dfe der Schneeflocken."
+        },
+        "19687950a04ba4948f1b636eeee176a8": {
+            "text": "Mindestgeschwindigkeit der fallenden Schneeflocken"
+        },
+        "7c3e6c63aa68e911317fcdcabc05a398": {
+            "text": "Bestimmen Sie die Mindestgeschwindigkeit, wie schnell die Schneeflocken absinken sollen."
+        },
+        "cdd34b377267d705085b0df47fbd08d7": {
+            "text": "Dies h\u00e4ngt mit der Gr\u00f6\u00dfe der Schneeflocke zusammen. Gr\u00f6\u00dfere Flocken fallen schneller als kleinere. Der Standardwert ist 1."
+        },
+        "979f95689301bf8d1d14715fe81785fb": {
+            "text": "Maximale Geschwindigkeit der fallenden Schneeflocken"
+        },
+        "eafe2b8ed92fdeffc3e3af2c31566d0d": {
+            "text": "Bestimmen Sie die H\u00f6chstgeschwindigkeit, wie schnell die Schneeflocken absinken sollen."
+        },
+        "061cf0ebbf30dbac267c1a6bd370c8d0": {
+            "text": "Dies h\u00e4ngt mit der Gr\u00f6\u00dfe der Schneeflocke zusammen. Gr\u00f6\u00dfere Flocken fallen schneller als kleinere. Der Standardwert ist 3."
+        },
+        "465fec31e97eb5b164195eac30415e7c": {
+            "text": "Text f\u00fcr eine Schneeflocke"
+        },
+        "bbad4fc94a08942223027c1f31782ecf": {
+            "text": "Dies kann jedes Symbol oder jeder Text sein."
+        },
+        "f5438eb715b70857bc3f70b7ab19117a": {
+            "text": "Der Standardwert is \u2744."
+        },
+        "1444ec6059ee5c41cb34755dd4dc66dd": {
+            "text": "Farbe einer Schneeflocke"
+        },
+        "efde0e59da6e0551ce19af07a9ec68db": {
+            "text": "Geben Sie die Farbe der Schneeflocken im HEX-Format ein."
+        },
+        "7e4c79e7ca54360cb4effc0cedd02bae": {
+            "text": "Der Standardwert is #99ccff."
+        },
+        "aca979d43879795879a6ca0f77f98898": {
+            "text": "Z-Index f\u00fcr die Schneeflocken"
+        },
+        "7b32a7748b212784ed954f9c6767bb30": {
+            "text": "\u00c4ndern Sie bei Bedarf den Z-Index der Schneeflocken."
+        },
+        "bf3a9554e539459bddcc93514112400f": {
+            "text": "\u00c4ndere Sie diesen Wert, wenn Probleme bei der Anzeige der Schneeflocken auftreten. Der Standardwert ist 1000."
+        },
+        "b423fa8a38361e5df2a59c8a50e839d0": {
+            "text": "Die Differenz zwischen dem Start- und Enddaten muss weniger als 1 Jahr betragen, wenn Sie die j\u00e4hrliche Wiederholung aktiviert haben."
+        },
+        "d97b48dfaca8afc9b65b0dea88848a19": {
+            "text": "Der Schneefall ist deaktiviert, weil Sie Fehler in Ihren Einstellungen haben."
+        },
+        "1ebe9114e17ff1a4f70c0cd049b97966": {
+            "text": "Aktivierung\/Deaktivierung des Schneefalls"
+        },
+        "3b7d1931b5c4172456fb010813ccb5c7": {
+            "text": "Mindestgr\u00f6\u00dfe der Schneeflocken in px"
+        },
+        "e267c972bfbc5125019f2e5846d19cdb": {
+            "text": "Der Standardwert ist 10 px."
+        },
+        "fac9e6d899425ff41955a438a517b987": {
+            "text": "Maximale Gr\u00f6\u00dfe der Schneeflocken in px"
+        },
+        "47d00e12d99c0ad445e16ec889c2bf43": {
+            "text": "Der Standardwert ist 30 px."
+        },
+        "d81f0f02cd6a877358cde8fbdbad89a5": {
+            "text": "d.m.Y"
+        }
+    }
+}

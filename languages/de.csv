@@ -1,0 +1,50 @@
+en,de,description,file,hash
+Y-m-d,d.m.Y,"the default date format",site/modules/SnowFallAnimation/SnowFallAnimation.module,d81f0f02cd6a877358cde8fbdbad89a5
+"The end date must be after the start date.","Das Enddatum muss nach dem Startdatum liegen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,0edf14887ad35145d302952c89b65b4b
+"The end date must be in the future not in the past.","Das Enddatum muss in der Zukunft liegen, nicht in der Vergangenheit.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,d908c765c46892d84f29a0e54481f895
+"The difference between the start and end dates must be less than 1 year if you have recurrence enabled each year.","Die Differenz zwischen dem Start- und Enddaten muss weniger als 1 Jahr betragen, wenn Sie die jährliche Wiederholung aktiviert haben.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,b423fa8a38361e5df2a59c8a50e839d0
+"At the moment the snowfall is enabled.","Im Moment ist der Schneefall aktiviert.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,de99d5e84f98b1627071b43d4c875fd3
+"At the moment the snowfall is enabled. It will be disabled on %s.","Im Moment ist der Schneefall aktiviert. Er wird aber am %s deaktiviert.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7c467a8b02abafd070f8073e7132030e
+"The snowfall is disabled, because you have errors in your settings.","Der Schneefall ist deaktiviert, weil Sie Fehler in Ihren Einstellungen haben.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,d97b48dfaca8afc9b65b0dea88848a19
+"At the moment the snowfall is disabled. It will be enabled on %s automatically.","Im Moment ist der Schneefall deaktiviert. Es wird aber automatisch am %s aktiviert.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,cd7eba45e2e8b12505742121f6338955
+"At the moment the snowfall is disabled.","Im Moment ist der Schneefall deaktiviert.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,27a89505baed7d2e4902af82907f13da
+"Activation/deactivation of the snowfall","Aktivierung/Deaktivierung des Schneefalls",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1ebe9114e17ff1a4f70c0cd049b97966
+"Activate/deactivate snowfall on the webpage.","Schneefall auf der Webseite aktivieren/deaktivieren.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,8dff19ba209044be653dd242b88ccead
+"Enable/disable the snowfall","Schneefall aktivieren/deaktivieren",,site/modules/SnowFallAnimation/SnowFallAnimation.module,368649e9a0ca3787feacd1be4d3250f1
+"Enable/disable the snowfall manually or by date.","Aktivieren oder deaktivieren Sie den Schneefall manuell oder per Datum.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,ebe5dadca9e2a8607a424f7a96435e54
+Off,Aus,,site/modules/SnowFallAnimation/SnowFallAnimation.module,d15305d7a4e34e02489c74a5ef542f36
+On,An,,site/modules/SnowFallAnimation/SnowFallAnimation.module,521c36a31c2762741cf0f8890cbe05e3
+"Enable/disable per date","Aktivieren/deaktivieren per Datum",,site/modules/SnowFallAnimation/SnowFallAnimation.module,58568913b3e0e100f7ca891eb4057622
+"Start date for the snowfall","Startdatum für den Schneefall",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1897c3b8cca1f6042a565088c0d5dc5f
+"Enter the date on which you want the snowfall to begin.","Geben Sie das Datum ein, an dem der Schneefall beginnen soll.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,969e921081cfe6d56d3a2eda1273c91a
+"End date for the snowfall","Enddatum für den Schneefall",,site/modules/SnowFallAnimation/SnowFallAnimation.module,db60641143ce4fb6714f3c26971642c4
+"Enter the date on which you want the snowfall to end.","Geben Sie das Datum ein, an dem der Schneefall enden soll.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,df2dfcb12e093a99b8f5248f9fb3ea35
+"Use these date settings (day and month) every year","Diese Datums-Einstellungen (Tag und Monat) jedes Jahr verwenden",,site/modules/SnowFallAnimation/SnowFallAnimation.module,14fdc176b9012756aa0eb65ac1cd0c1d
+"If you check the box, snowfall will be automatically activated and disabled on the specified days and months each year.","Wenn Sie das Kästchen ankreuzen, wird der Schneefall an den angegebenen Tagen und Monaten jeden Jahres automatisch aktiviert und auch wieder deaktiviert.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,006c2f845993774cfe8d3c3fe477d4b6
+"In this case, the snowfall begins and ends every year on the previously determined day and month.","In diesem Fall beginnt und endet der Schneefall jedes Jahr am jeweiligen zuvor festgelegten Tag und Monat.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7b827f3f29f0877fde6d9f80c26eb43e
+"Styling and settings for the snowflakes","Styling und Einstellungen für die Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,2efd404741a9ce366668c203531cec37
+"Make your global settings for the output of the snowflakes.","Setze Sie Ihre globalen Einstellungen für die Ausgabe der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1bbf51b20b29b63d66f0ef091f1b18d7
+"Number of snowflakes","Anzahl der Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,be62aa503c80d9a2f220778a91c38ff0
+"The number of snowflakes that are rendered on the page at any given time.","Die Anzahl der Schneeflocken, die zu einem bestimmten Zeitpunkt auf der Seite angezeigt werden.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,aeee4a2d6267729453a3850dc97eed84
+"Default value is 500.","Der Standardwert beträgt 500.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,8f656f21f2f2d71b8f0cb10bbb626123
+"Minimum size of the snowflakes in px","Mindestgröße der Schneeflocken in px",,site/modules/SnowFallAnimation/SnowFallAnimation.module,3b7d1931b5c4172456fb010813ccb5c7
+"Determine the minimum size of the snowflakes.","Bestimmen Sie die Mindestgröße der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,9118f7fe47a71285e8f2be0b71f36d75
+"Default value is 10 px.","Der Standardwert ist 10 px.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,e267c972bfbc5125019f2e5846d19cdb
+"Maximum size of the snowflakes in px","Maximale Größe der Schneeflocken in px",,site/modules/SnowFallAnimation/SnowFallAnimation.module,fac9e6d899425ff41955a438a517b987
+"Determine the maximum size of the snowflakes.","Bestimme Sie die maximale Größe der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,01210c41d87e6a6662f40424ba16960f
+"Default value is 30 px.","Der Standardwert ist 30 px.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,47d00e12d99c0ad445e16ec889c2bf43
+"Minimum speed of snowflakes falling","Mindestgeschwindigkeit der fallenden Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,19687950a04ba4948f1b636eeee176a8
+"Determine the minimum speed at how fast the snowflakes dwindle down.","Bestimmen Sie die Mindestgeschwindigkeit, wie schnell die Schneeflocken absinken sollen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7c3e6c63aa68e911317fcdcabc05a398
+"This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 1.","Dies hängt mit der Größe der Schneeflocke zusammen. Größere Flocken fallen schneller als kleinere. Der Standardwert ist 1.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,cdd34b377267d705085b0df47fbd08d7
+"Maximum speed of snowflakes falling","Maximale Geschwindigkeit der fallenden Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,979f95689301bf8d1d14715fe81785fb
+"Determine the maximum speed at how fast the snowflakes dwindle down.","Bestimmen Sie die Höchstgeschwindigkeit, wie schnell die Schneeflocken absinken sollen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,eafe2b8ed92fdeffc3e3af2c31566d0d
+"This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 3.","Dies hängt mit der Größe der Schneeflocke zusammen. Größere Flocken fallen schneller als kleinere. Der Standardwert ist 3.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,061cf0ebbf30dbac267c1a6bd370c8d0
+"Text for a snowflake","Text für eine Schneeflocke",,site/modules/SnowFallAnimation/SnowFallAnimation.module,465fec31e97eb5b164195eac30415e7c
+"This can be any symbol or text.","Dies kann jedes Symbol oder jeder Text sein.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,bbad4fc94a08942223027c1f31782ecf
+"Default value is ❄.","Der Standardwert is ❄.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,f5438eb715b70857bc3f70b7ab19117a
+"Color of a snowflake","Farbe einer Schneeflocke",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1444ec6059ee5c41cb34755dd4dc66dd
+"Enter the color of the snowflakes in HEX format.","Geben Sie die Farbe der Schneeflocken im HEX-Format ein.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,efde0e59da6e0551ce19af07a9ec68db
+"Default value is #99ccff.","Der Standardwert is #99ccff.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7e4c79e7ca54360cb4effc0cedd02bae
+"Z-Index for the snowflakes","Z-Index für die Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,aca979d43879795879a6ca0f77f98898
+"Change the Z-Index for the snowflakes if necessary.","Ändern Sie bei Bedarf den Z-Index der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7b32a7748b212784ed954f9c6767bb30
+"Change this value if you have problems displaying the snowflakes. Default is 1000.","Ändere Sie diesen Wert, wenn Probleme bei der Anzeige der Schneeflocken auftreten. Der Standardwert ist 1000.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,bf3a9554e539459bddcc93514112400f
