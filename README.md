@@ -7,7 +7,7 @@ magic to your project.
 
 ![Snowfall demo](https://github.com/juergenweb/SnowfallAnimation/blob/main/images/snowfall-demo.png?raw=true)
 
-This module is based on the nice JavaScript library of [Andrey Yurkevich](https://github.com/Andrey-1988-dev) and can be found [here](https://github.com/Andrey-1988-dev/snowfall.js).
+This module is based on the nice JavaScript library of [Andrey Yurkevich](https://github.com/Andrey-1988-dev) and can be found [here](https://github.com/Andrey-1988-dev/snowfall-js).
 
 ## Configuration settings
 1. Set the number of snowflakes on the page
