@@ -7,7 +7,16 @@ magic to your project.
 
 ![Snowfall demo](https://github.com/juergenweb/SnowfallAnimation/blob/main/images/snowfall-demo.png?raw=true)
 
-This module is based on the nice JavaScript library of [Andrey Yurkevich](https://github.com/Andrey-1988-dev) and can be found [here](https://github.com/Andrey-1988-dev/snowfall-js).
+This module is based on the nice JavaScript library of [ddosnotification](https://github.com/ddosnotification) and can be found [here](https://github.com/ddosnotification/snow-theme).
+
+## Highlights
+* Lightweight - Under 1kb minified
+* Fully Responsive - Works perfectly on all devices and screen sizes
+* Zero Dependencies - Pure JavaScript, no external libraries required
+* Highly Customizable - Easy to adjust snowfall density, speed, size, and more
+* Performance Optimized - Automatic cleanup and limited concurrent snowflakes
+* Safe to Use - Non-intrusive design, won't interfere with page interactions
+* Cross-Browser Compatible - Works on all modern browsers
 
 ## Configuration settings
 1. Set the number of snowflakes on the page
@@ -16,7 +25,7 @@ This module is based on the nice JavaScript library of [Andrey Yurkevich](https:
 4. Set a minimum and maximum speed for the falling snowflakes
 5. Change the text (snowflakes icon) for the canvas if needed
 6. Enable/disable snowfall by setting a start and end date
-7. Enable annual recurrences to start and end snowfall on the same date each year.
+7. Enable annual recurrences to start and end snowfall on the same date each year (no need to take care any longer).
 
 ## Requirements
 * PHP>=8.0.0
@@ -25,12 +34,17 @@ This module is based on the nice JavaScript library of [Andrey Yurkevich](https:
 
 ## Installation
 
+### Manuell installation
+
 Download the module folder and extract it under site/modules.
 
 Take care that the extracted folders name is SnowFallAnimation and not SnowFallAnimation-main or another name.
 
 Refresh the modules and install the module via the Backend.
 
+### Installation via ProcessWire backend (recommended)
+
+Install the module as usual via the PW backend.
 
 ## Usage
 
@@ -54,6 +68,10 @@ By default, this module uses the date format "Y-m-d" for the two date pickers, a
 
 If you want to use a different date format, such as "d.m.Y", you can change the format within the language file for this
 module because the format is saved as a translatable string.
+
+## License
+
+MIT License - feel free to use in both personal and commercial projects.
 
 
 
