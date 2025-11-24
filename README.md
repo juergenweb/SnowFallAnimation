@@ -17,6 +17,8 @@ This module is based on the nice JavaScript library of [ddosnotification](https:
 * Performance Optimized - Automatic cleanup and limited concurrent snowflakes
 * Safe to Use - Non-intrusive design, won't interfere with page interactions
 * Cross-Browser Compatible - Works on all modern browsers
+* Support for RockLanguage
+* German Translations included
 
 ## Configuration settings
 1. Set the number of snowflakes on the page
