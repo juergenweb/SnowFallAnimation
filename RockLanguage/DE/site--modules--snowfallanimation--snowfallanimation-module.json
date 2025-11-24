@@ -65,47 +65,14 @@
         "1bbf51b20b29b63d66f0ef091f1b18d7": {
             "text": "Setze Sie Ihre globalen Einstellungen f\u00fcr die Ausgabe der Schneeflocken."
         },
-        "be62aa503c80d9a2f220778a91c38ff0": {
-            "text": "Anzahl der Schneeflocken"
-        },
         "aeee4a2d6267729453a3850dc97eed84": {
             "text": "Die Anzahl der Schneeflocken, die zu einem bestimmten Zeitpunkt auf der Seite angezeigt werden."
-        },
-        "8f656f21f2f2d71b8f0cb10bbb626123": {
-            "text": "Der Standardwert betr\u00e4gt 500."
         },
         "9118f7fe47a71285e8f2be0b71f36d75": {
             "text": "Bestimmen Sie die Mindestgr\u00f6\u00dfe der Schneeflocken."
         },
         "01210c41d87e6a6662f40424ba16960f": {
             "text": "Bestimme Sie die maximale Gr\u00f6\u00dfe der Schneeflocken."
-        },
-        "19687950a04ba4948f1b636eeee176a8": {
-            "text": "Mindestgeschwindigkeit der fallenden Schneeflocken"
-        },
-        "7c3e6c63aa68e911317fcdcabc05a398": {
-            "text": "Bestimmen Sie die Mindestgeschwindigkeit, wie schnell die Schneeflocken absinken sollen."
-        },
-        "cdd34b377267d705085b0df47fbd08d7": {
-            "text": "Dies h\u00e4ngt mit der Gr\u00f6\u00dfe der Schneeflocke zusammen. Gr\u00f6\u00dfere Flocken fallen schneller als kleinere. Der Standardwert ist 1."
-        },
-        "979f95689301bf8d1d14715fe81785fb": {
-            "text": "Maximale Geschwindigkeit der fallenden Schneeflocken"
-        },
-        "eafe2b8ed92fdeffc3e3af2c31566d0d": {
-            "text": "Bestimmen Sie die H\u00f6chstgeschwindigkeit, wie schnell die Schneeflocken absinken sollen."
-        },
-        "061cf0ebbf30dbac267c1a6bd370c8d0": {
-            "text": "Dies h\u00e4ngt mit der Gr\u00f6\u00dfe der Schneeflocke zusammen. Gr\u00f6\u00dfere Flocken fallen schneller als kleinere. Der Standardwert ist 3."
-        },
-        "465fec31e97eb5b164195eac30415e7c": {
-            "text": "Text f\u00fcr eine Schneeflocke"
-        },
-        "bbad4fc94a08942223027c1f31782ecf": {
-            "text": "Dies kann jedes Symbol oder jeder Text sein."
-        },
-        "f5438eb715b70857bc3f70b7ab19117a": {
-            "text": "Der Standardwert is \u2744."
         },
         "1444ec6059ee5c41cb34755dd4dc66dd": {
             "text": "Farbe einer Schneeflocke"
@@ -114,7 +81,7 @@
             "text": "Geben Sie die Farbe der Schneeflocken im HEX-Format ein."
         },
         "7e4c79e7ca54360cb4effc0cedd02bae": {
-            "text": "Der Standardwert is #99ccff."
+            "text": "Der Standardwert betr\u00e4gt #99ccff."
         },
         "aca979d43879795879a6ca0f77f98898": {
             "text": "Z-Index f\u00fcr die Schneeflocken"
@@ -134,20 +101,53 @@
         "1ebe9114e17ff1a4f70c0cd049b97966": {
             "text": "Aktivierung\/Deaktivierung des Schneefalls"
         },
-        "3b7d1931b5c4172456fb010813ccb5c7": {
-            "text": "Mindestgr\u00f6\u00dfe der Schneeflocken in px"
-        },
-        "e267c972bfbc5125019f2e5846d19cdb": {
-            "text": "Der Standardwert ist 10 px."
-        },
-        "fac9e6d899425ff41955a438a517b987": {
-            "text": "Maximale Gr\u00f6\u00dfe der Schneeflocken in px"
-        },
-        "47d00e12d99c0ad445e16ec889c2bf43": {
-            "text": "Der Standardwert ist 30 px."
-        },
         "d81f0f02cd6a877358cde8fbdbad89a5": {
             "text": "d.m.Y"
+        },
+        "1aeacc6e0c0ddb8457d92646d6de7ee3": {
+            "text": "Schnee-Dichte"
+        },
+        "b28d21f3ea3f6165e81277a64b08ae35": {
+            "text": "Mindestgr\u00f6\u00dfe der Schneeflocken (in em)"
+        },
+        "009e49a3475cdfe688e15ec7f4565506": {
+            "text": "Der Standardwert betr\u00e4gt 0,8 em."
+        },
+        "5c0da777247fd7f636103cd3a910cc61": {
+            "text": "Der Standardwert betr\u00e4gt bei 1,5 em."
+        },
+        "37f860b3fac902f9cdbd0b18ab811756": {
+            "text": "Minimale Falldauer (Sekunden)"
+        },
+        "78a56995737b0165bee14f79f01f4df6": {
+            "text": "Bestimmen Sie die minimale Falldauer (je niedriger, desto schneller)."
+        },
+        "101425b57eb2c1f56480a7936de449ee": {
+            "text": "Der Standardwert betr\u00e4gt 5 Sekunden."
+        },
+        "786c7ad6d69bd49078c71c0fbb9b255f": {
+            "text": "Maximale Falldauer (Sekunden)"
+        },
+        "6be3921a40cac2a50db050086fe1f7ef": {
+            "text": "Der Standardwert betr\u00e4gt 15 Sekunden. Tipp: Um einen realistischen Effekt zu erzeugen, sollten die Mindest- und maximale Falldauer nicht zu weit auseinanderliegen."
+        },
+        "98cc839803ddaf833b0bfd7b0e9e6da1": {
+            "text": "Schneeflockensymbole"
+        },
+        "c254c92cba088211347d100778119a97": {
+            "text": "Bitte geben Sie die verschiedenen Schneeflocken ein getrennt durch ein Komma ein."
+        },
+        "6ed84d884a8444866a2664cbe3b905b0": {
+            "text": "Standardwerte sind %s."
+        },
+        "9130cf96567ca98d6765abb1361f6f8e": {
+            "text": "Der Standardwert betr\u00e4gt 50. Je h\u00f6her der Wert ist, desto dichter ist auch der Schneefall."
+        },
+        "c7598f5c988cf6b08861780ed14ac66a": {
+            "text": "Bestimmen Sie die maximale Falldauer (je h\u00f6her, desto langsamer)."
+        },
+        "cbcd4100e3b22f8853a78873e01e0664": {
+            "text": "Maximale Gr\u00f6\u00dfe der Schneeflocken (in em)"
         }
     }
 }

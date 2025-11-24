@@ -156,6 +156,7 @@ class Snowfall {
         this.animateSnowflakes();
     }
 
+
     // Function to resize the canvas
     resizeCanvas = () => {
         let oldCanvasWidth, oldCanvasHeight
@@ -164,6 +165,7 @@ class Snowfall {
             oldCanvasHeight = this.canvas.height
         }
         this.canvas.style.display = 'none';
+
 
         // Set the width and height of the canvas equal to the width and height of the browser window
         if (window.devicePixelRatio > 1) {

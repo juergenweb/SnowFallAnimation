@@ -24,27 +24,27 @@ On,An,,site/modules/SnowFallAnimation/SnowFallAnimation.module,521c36a31c2762741
 "In this case, the snowfall begins and ends every year on the previously determined day and month.","In diesem Fall beginnt und endet der Schneefall jedes Jahr am jeweiligen zuvor festgelegten Tag und Monat.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7b827f3f29f0877fde6d9f80c26eb43e
 "Styling and settings for the snowflakes","Styling und Einstellungen für die Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,2efd404741a9ce366668c203531cec37
 "Make your global settings for the output of the snowflakes.","Setze Sie Ihre globalen Einstellungen für die Ausgabe der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1bbf51b20b29b63d66f0ef091f1b18d7
-"Number of snowflakes","Anzahl der Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,be62aa503c80d9a2f220778a91c38ff0
+"Snow density",Schnee-Dichte,,site/modules/SnowFallAnimation/SnowFallAnimation.module,1aeacc6e0c0ddb8457d92646d6de7ee3
 "The number of snowflakes that are rendered on the page at any given time.","Die Anzahl der Schneeflocken, die zu einem bestimmten Zeitpunkt auf der Seite angezeigt werden.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,aeee4a2d6267729453a3850dc97eed84
-"Default value is 500.","Der Standardwert beträgt 500.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,8f656f21f2f2d71b8f0cb10bbb626123
-"Minimum size of the snowflakes in px","Mindestgröße der Schneeflocken in px",,site/modules/SnowFallAnimation/SnowFallAnimation.module,3b7d1931b5c4172456fb010813ccb5c7
+"Default value is 50. The higher the value, the denser the snowfall.","Der Standardwert beträgt 50. Je höher der Wert ist, desto dichter ist auch der Schneefall.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,9130cf96567ca98d6765abb1361f6f8e
+"Minimum size of the snowflakes (in em)","Mindestgröße der Schneeflocken (in em)",,site/modules/SnowFallAnimation/SnowFallAnimation.module,b28d21f3ea3f6165e81277a64b08ae35
 "Determine the minimum size of the snowflakes.","Bestimmen Sie die Mindestgröße der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,9118f7fe47a71285e8f2be0b71f36d75
-"Default value is 10 px.","Der Standardwert ist 10 px.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,e267c972bfbc5125019f2e5846d19cdb
-"Maximum size of the snowflakes in px","Maximale Größe der Schneeflocken in px",,site/modules/SnowFallAnimation/SnowFallAnimation.module,fac9e6d899425ff41955a438a517b987
+"Default value is 0.8 em.","Der Standardwert beträgt 0,8 em.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,009e49a3475cdfe688e15ec7f4565506
+"Maximum size of the snowflakes (in em)","Maximale Größe der Schneeflocken (in em)",,site/modules/SnowFallAnimation/SnowFallAnimation.module,cbcd4100e3b22f8853a78873e01e0664
 "Determine the maximum size of the snowflakes.","Bestimme Sie die maximale Größe der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,01210c41d87e6a6662f40424ba16960f
-"Default value is 30 px.","Der Standardwert ist 30 px.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,47d00e12d99c0ad445e16ec889c2bf43
-"Minimum speed of snowflakes falling","Mindestgeschwindigkeit der fallenden Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,19687950a04ba4948f1b636eeee176a8
-"Determine the minimum speed at how fast the snowflakes dwindle down.","Bestimmen Sie die Mindestgeschwindigkeit, wie schnell die Schneeflocken absinken sollen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7c3e6c63aa68e911317fcdcabc05a398
-"This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 1.","Dies hängt mit der Größe der Schneeflocke zusammen. Größere Flocken fallen schneller als kleinere. Der Standardwert ist 1.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,cdd34b377267d705085b0df47fbd08d7
-"Maximum speed of snowflakes falling","Maximale Geschwindigkeit der fallenden Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,979f95689301bf8d1d14715fe81785fb
-"Determine the maximum speed at how fast the snowflakes dwindle down.","Bestimmen Sie die Höchstgeschwindigkeit, wie schnell die Schneeflocken absinken sollen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,eafe2b8ed92fdeffc3e3af2c31566d0d
-"This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 3.","Dies hängt mit der Größe der Schneeflocke zusammen. Größere Flocken fallen schneller als kleinere. Der Standardwert ist 3.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,061cf0ebbf30dbac267c1a6bd370c8d0
-"Text for a snowflake","Text für eine Schneeflocke",,site/modules/SnowFallAnimation/SnowFallAnimation.module,465fec31e97eb5b164195eac30415e7c
-"This can be any symbol or text.","Dies kann jedes Symbol oder jeder Text sein.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,bbad4fc94a08942223027c1f31782ecf
-"Default value is ❄.","Der Standardwert is ❄.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,f5438eb715b70857bc3f70b7ab19117a
+"Default value is 1.5 em.","Der Standardwert beträgt bei 1,5 em.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,5c0da777247fd7f636103cd3a910cc61
+"Minimum fall duration (seconds)","Minimale Falldauer (Sekunden)",,site/modules/SnowFallAnimation/SnowFallAnimation.module,37f860b3fac902f9cdbd0b18ab811756
+"Determine the minimum fall duration (the lower, the faster).","Bestimmen Sie die minimale Falldauer (je niedriger, desto schneller).",,site/modules/SnowFallAnimation/SnowFallAnimation.module,78a56995737b0165bee14f79f01f4df6
+"Default value is 5 seconds.","Der Standardwert beträgt 5 Sekunden.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,101425b57eb2c1f56480a7936de449ee
+"Maximum fall duration (seconds)","Maximale Falldauer (Sekunden)",,site/modules/SnowFallAnimation/SnowFallAnimation.module,786c7ad6d69bd49078c71c0fbb9b255f
+"Determine the maximum fall duration (the higher, the slower).","Bestimmen Sie die maximale Falldauer (je höher, desto langsamer).",,site/modules/SnowFallAnimation/SnowFallAnimation.module,c7598f5c988cf6b08861780ed14ac66a
+"Default value is 15 seconds. Tipp: To create a realistic effect, min and max duration time should not be too far apart.","Der Standardwert beträgt 15 Sekunden. Tipp: Um einen realistischen Effekt zu erzeugen, sollten die Mindest- und maximale Falldauer nicht zu weit auseinanderliegen.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,6be3921a40cac2a50db050086fe1f7ef
+"Snowflakes symbols",Schneeflockensymbole,,site/modules/SnowFallAnimation/SnowFallAnimation.module,98cc839803ddaf833b0bfd7b0e9e6da1
+"Please enter the different snowflakes separated by a comma.","Bitte geben Sie die verschiedenen Schneeflocken ein getrennt durch ein Komma ein.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,c254c92cba088211347d100778119a97
+"Default values are %s.","Standardwerte sind %s.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,6ed84d884a8444866a2664cbe3b905b0
 "Color of a snowflake","Farbe einer Schneeflocke",,site/modules/SnowFallAnimation/SnowFallAnimation.module,1444ec6059ee5c41cb34755dd4dc66dd
 "Enter the color of the snowflakes in HEX format.","Geben Sie die Farbe der Schneeflocken im HEX-Format ein.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,efde0e59da6e0551ce19af07a9ec68db
-"Default value is #99ccff.","Der Standardwert is #99ccff.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7e4c79e7ca54360cb4effc0cedd02bae
+"Default value is #99ccff.","Der Standardwert beträgt #99ccff.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7e4c79e7ca54360cb4effc0cedd02bae
 "Z-Index for the snowflakes","Z-Index für die Schneeflocken",,site/modules/SnowFallAnimation/SnowFallAnimation.module,aca979d43879795879a6ca0f77f98898
 "Change the Z-Index for the snowflakes if necessary.","Ändern Sie bei Bedarf den Z-Index der Schneeflocken.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,7b32a7748b212784ed954f9c6767bb30
 "Change this value if you have problems displaying the snowflakes. Default is 1000.","Ändere Sie diesen Wert, wenn Probleme bei der Anzeige der Schneeflocken auftreten. Der Standardwert ist 1000.",,site/modules/SnowFallAnimation/SnowFallAnimation.module,bf3a9554e539459bddcc93514112400f

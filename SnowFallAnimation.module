@@ -21,8 +21,8 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 {
 
     protected int $input_count = 500;
-    protected int $input_minRadius = 10;
-    protected int $input_maxRadius = 30;
+    protected float $input_minRadius = 0.8;
+    protected float $input_maxRadius = 1.5;
     protected int $input_minSpeed = 1;
     protected int $input_maxSpeed = 3;
     protected string $input_text = '❄';
@@ -105,41 +105,59 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 
         $version = $this->getModuleInfo()['version'];
 
-        $script = '<script src="' . $this->wire('config')->urls->$this . 'snowfall.js?v=' . $version . '"></script>' . PHP_EOL;
+        $script = '<script src="' . $this->wire('config')->urls->$this . 'snow.min.js?v=' . $version . time() . '"></script>' . PHP_EOL;
 
-        //This is the default config data as set inside the snowfall.js
+        //This is the default config data as set inside the snow.js
         $defaultData = [
-            'count' => 100, // number of snowflakes
-            'minRadius' => 10, // minimum radius of a snowflake in pixels
-            'maxRadius' => 30, // maximum radius of a snowflake in pixels
-            'minSpeed' => 3, // minimum speed of a snowflake in pixels per frame
-            'maxSpeed' => 10, // maximum speed of a snowflake in pixels per frame
-            'text' => "❄", // text for a snowflake (can be any symbol or text)
-            'color' => "#99ccff", // color of a snowflake in HEX format
-            'zIndex' => "1000" // z-index for the snowflakes canvas
+            'SnowTheme.config.snowflakes' => '❄,❅,❆',      // Snowflake characters
+            'SnowTheme.config.density' => 50,                        // Maximum number of snowflakes
+            'SnowTheme.config.interval' => 200000,                      // How often new snowflakes are created (ms)
+            'SnowTheme.config.minSize' => 0.8,                      // Minimum snowflake size
+            'SnowTheme.config.maxSize' => 1.5,                      // Maximum snowflake size
+            'SnowTheme.config.minDuration' => 5,                    // Minimum fall duration (seconds)
+            'SnowTheme.config.maxDuration' => 15,                   // Maximum fall duration (seconds)
+            'SnowTheme.config.wind' => 20,                          // Wind effect strength
+            'SnowTheme.config.zIndex' => 999999,                    // Layer level of snowflakes
+            'SnowTheme.config.color' => '#fff'                     // Color of snowflakes
         ];
 
         $configData = [
-            'count' => $this->input_count, // number of snowflakes
-            'minRadius' => $this->input_minRadius, // minimum radius of a snowflake in pixels
-            'maxRadius' => $this->input_maxRadius, // maximum radius of a snowflake in pixels
-            'minSpeed' => $this->input_minSpeed, // minimum speed of a snowflake in pixels per frame
-            'maxSpeed' => $this->input_maxSpeed, // maximum speed of a snowflake in pixels per frame
-            'text' => $this->input_text, // text for a snowflake (can be any symbol or text)
-            'color' => $this->input_color, // color of a snowflake in HEX format
-            'zIndex' => $this->input_zIndex // z-index for the snowflakes canvas
+            'SnowTheme.config.density' => $this->input_count, // number of snowflakes
+            'SnowTheme.config.minSize' => $this->input_minRadius, // minimum radius of a snowflake in pixels
+            'SnowTheme.config.maxSize' => $this->input_maxRadius, // maximum radius of a snowflake in pixels
+            'SnowTheme.config.minDuration' => $this->input_minSpeed, // minimum speed of a snowflake in pixels per frame
+            'SnowTheme.config.maxDuration' => $this->input_maxSpeed, // maximum speed of a snowflake in pixels per frame
+            'SnowTheme.config.snowflakes' => trim($this->input_text), // text for a snowflake (can be any symbol or text)
+            'SnowTheme.config.zIndex' => $this->input_zIndex, // z-index for the snowflakes canvas
+            'SnowTheme.config.color' => '"'.$this->input_color.'"', // color for a snowflake (in HEX code)
         ];
 
         // compare default and custom settings
         $diffData = array_diff_assoc($configData, $defaultData);
-        $configValues = $diffData ? json_encode($diffData) : '';
-        $script .= '<script>let snowfall = new Snowfall(' . $configValues . ')</script>';
+
+        if($diffData) {
+            $configValues = '';
+            foreach ($diffData as $name => $value) {
+                if($name == 'SnowTheme.config.snowflakes'){
+
+                    $value = str_replace('\'', '', $value);
+                    $value = str_replace(',', '\',\'', $value);
+                    $configValues .= $name . ' = [\'' . $value . '\'];';
+                } else {
+                    $configValues .= $name . ' = ' . $value . ';';
+                }
+            }
+
+            $script .= '<script>' . $configValues . '</script>';
+        }
 
         // check if script should be embedded or not
         $visibility = intval($this->input_visibility);
         if ($visibility > 0) {
             $show = $visibility === 1 || $this->checkInRange();
             if ($show) {
+                $css = '<link rel="stylesheet" type="text/css" href="' . $this->wire('config')->urls->$this . 'snowfall.min.css?v=' . $version. '">' . PHP_EOL;
+                $event->return = str_replace('</head>', $css . PHP_EOL . '</head>', $event->return);
                 $event->return = str_replace('</body>', $script . PHP_EOL . '</body>', $event->return);
             }
         }
@@ -405,9 +423,9 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 
         // set the number of snowflakes
         $count = $this->wire('modules')->get('InputfieldInteger');
-        $count->label = $this->_('Number of snowflakes');
+        $count->label = $this->_('Snow density');
         $count->description = $this->_('The number of snowflakes that are rendered on the page at any given time.');
-        $count->notes = $this->_('Default value is 500.');
+        $count->notes = $this->_('Default value is 50. The higher the value, the denser the snowfall.');
         $count->attr('name', 'input_count');
         $count->attr('type', 'number');
         $count->attr('value', $this->input_count);
@@ -416,22 +434,22 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
         $fieldset2->add($count);
 
         // set the min size for the snowflakes
-        $minRadius = $this->wire('modules')->get('InputfieldInteger');
-        $minRadius->label = $this->_('Minimum size of the snowflakes in px');
+        $minRadius = $this->wire('modules')->get('InputfieldFloat');
+        $minRadius->label = $this->_('Minimum size of the snowflakes (in em)');
         $minRadius->description = $this->_('Determine the minimum size of the snowflakes.');
-        $minRadius->notes = $this->_('Default value is 10 px.');
+        $minRadius->notes = $this->_('Default value is 0.8 em.');
         $minRadius->attr('name', 'input_minRadius');
+        $minRadius->attr('min', '0.1');
         $minRadius->attr('type', 'number');
         $minRadius->attr('value', $this->input_minRadius);
-        $minRadius->attr('min', 1);
         $minRadius->required = 1;
         $fieldset2->add($minRadius);
 
         // set the min size for the snowflakes
-        $maxRadius = $this->wire('modules')->get('InputfieldInteger');
-        $maxRadius->label = $this->_('Maximum size of the snowflakes in px');
+        $maxRadius = $this->wire('modules')->get('InputfieldFloat');
+        $maxRadius->label = $this->_('Maximum size of the snowflakes (in em)');
         $maxRadius->description = $this->_('Determine the maximum size of the snowflakes.');
-        $maxRadius->notes = $this->_('Default value is 30 px.');
+        $maxRadius->notes = $this->_('Default value is 1.5 em.');
         $maxRadius->attr('name', 'input_maxRadius');
         $maxRadius->attr('type', 'number');
         $maxRadius->attr('value', $this->input_maxRadius);
@@ -441,9 +459,9 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 
         // set the min speed for the snowflakes
         $minSpeed = $this->wire('modules')->get('InputfieldInteger');
-        $minSpeed->label = $this->_('Minimum speed of snowflakes falling');
-        $minSpeed->description = $this->_('Determine the minimum speed at how fast the snowflakes dwindle down.');
-        $minSpeed->notes = $this->_('This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 1.');
+        $minSpeed->label = $this->_('Minimum fall duration (seconds)');
+        $minSpeed->description = $this->_('Determine the minimum fall duration (the lower, the faster).');
+        $minSpeed->notes = $this->_('Default value is 5 seconds.');
         $minSpeed->attr('name', 'input_minSpeed');
         $minSpeed->attr('type', 'number');
         $minSpeed->attr('value', $this->input_minSpeed);
@@ -453,9 +471,9 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 
         // set the max speed for the snowflakes
         $maxSpeed = $this->wire('modules')->get('InputfieldInteger');
-        $maxSpeed->label = $this->_('Maximum speed of snowflakes falling');
-        $maxSpeed->description = $this->_('Determine the maximum speed at how fast the snowflakes dwindle down.');
-        $maxSpeed->notes = $this->_('This is related to the snowflake size. Bigger flakes will fall faster than smaller ones. Default value is 3.');
+        $maxSpeed->label = $this->_('Maximum fall duration (seconds)');
+        $maxSpeed->description = $this->_('Determine the maximum fall duration (the higher, the slower).');
+        $maxSpeed->notes = $this->_('Default value is 15 seconds. Tipp: To create a realistic effect, min and max duration time should not be too far apart.');
         $maxSpeed->attr('name', 'input_maxSpeed');
         $maxSpeed->attr('type', 'number');
         $maxSpeed->attr('value', $this->input_maxSpeed);
@@ -465,9 +483,9 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
 
         // set the text for the snowflakes
         $text = $this->wire('modules')->get('InputfieldText');
-        $text->label = $this->_('Text for a snowflake');
-        $text->description = $this->_('This can be any symbol or text.');
-        $text->notes = $this->_('Default value is ❄.');
+        $text->label = $this->_('Snowflakes symbols');
+        $text->description = $this->_('Please enter the different snowflakes separated by a comma.');
+        $text->notes = sprintf($this->_('Default values are %s.'), '❄,❅,❆');
         $text->attr('name', 'input_text');
         $text->attr('type', 'text');
         $text->attr('value', $this->input_text);
