@@ -46,7 +46,7 @@ Refresh the modules and install the module via the Backend.
 
 ### Installation via ProcessWire backend (recommended)
 
-Install the module as usual via the PW backend.
+Install the module as usual via the PW backend - coming soon!
 
 ## Usage
 
