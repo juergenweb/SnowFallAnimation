@@ -36,7 +36,7 @@ This module is based on the nice JavaScript library of [ddosnotification](https:
 
 ## Installation
 
-### Manuell installation
+### Manual installation
 
 Download the module folder and extract it under site/modules.
 
