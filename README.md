@@ -40,7 +40,7 @@ This module is based on the nice JavaScript library of [ddosnotification](https:
 
 Download the module folder and extract it under site/modules.
 
-Take care that the extracted folders name is SnowFallAnimation and not SnowFallAnimation-main or another name.
+Make sure that the extracted folder is named SnowFallAnimation and not SnowFallAnimation-main or some other name.
 
 Refresh the modules and install the module via the Backend.
 
