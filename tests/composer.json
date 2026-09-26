@@ -1,0 +1,12 @@
+{
+    "name": "juergenweb/snowfallanimation-tests",
+    "description": "Unit tests for the SnowFallAnimation ProcessWire module",
+    "type": "project",
+    "license": "MIT",
+    "require-dev": {
+        "phpunit/phpunit": "^10.5 || ^11.0 || ^12.0"
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}

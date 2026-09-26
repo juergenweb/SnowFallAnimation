@@ -1,0 +1,16 @@
+# Files and folders that are not included in the release archives (git archive / GitHub zip downloads)
+
+# Tests (PHPUnit and Vitest)
+/tests export-ignore
+
+# Composer files for the test tools
+/vendor export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
+
+# Images for the README (the README loads them directly from GitHub)
+/images export-ignore
+
+# Git configuration files
+/.gitattributes export-ignore
+/.gitignore export-ignore

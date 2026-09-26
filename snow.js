@@ -15,12 +15,36 @@
         minDuration: 5,                    // Minimum animation duration (s)
         maxDuration: 15,                   // Maximum animation duration (s)
         wind: 20,                          // Maximum wind effect (px)
-        zIndex: 999999                     // z-index for the container
+        zIndex: 999999,                    // z-index for the container
+        color: '#fff'                      // Color of the snowflakes
     };
+
+    // Apply custom settings (e.g. from the SnowFallAnimation module) BEFORE the first snowflakes are created
+    // The config is read from the data-config attribute of this script tag (CSP-friendly, no inline script needed).
+    // window.SnowThemeConfig is still supported as fallback.
+    let custom = Object.assign({}, window.SnowThemeConfig || {});
+    const currentScript = document.currentScript;
+    if (currentScript && currentScript.dataset && currentScript.dataset.config) {
+        try {
+            Object.assign(custom, JSON.parse(currentScript.dataset.config));
+        } catch (e) {
+            // invalid JSON -> use the default config
+        }
+    }
+    Object.assign(config, custom);
+    if (!Array.isArray(config.snowflakes) || !config.snowflakes.length) config.snowflakes = ['❄', '❅', '❆'];
+
+    // Derive the interval from density and average duration, so that the density can actually be reached
+    // (each snowflake is removed after its duration, so max. visible flakes = duration / interval)
+    if (!custom.interval) {
+        const avgDuration = (Number(config.minDuration) + Number(config.maxDuration)) / 2;
+        config.interval = Math.max(16, Math.round(avgDuration * 1000 / Math.max(1, Number(config.density))));
+    }
 
     // Create container for snowflakes
     const container = document.createElement('div');
     container.id = 'snow-container';
+    container.style.zIndex = config.zIndex;
     document.body.appendChild(container);
 
     // Create a single snowflake
@@ -31,7 +55,8 @@
         snowflake.className = 'snowflake';
         snowflake.style.color = config.color;
 
-        snowflake.innerHTML = config.snowflakes[Math.floor(Math.random() * config.snowflakes.length)];
+        // textContent instead of innerHTML: the symbols are inserted as plain text, never as HTML (prevents XSS)
+        snowflake.textContent = String(config.snowflakes[Math.floor(Math.random() * config.snowflakes.length)]);
 
         // Random properties
         const startPositionX = Math.random() * window.innerWidth;
@@ -84,4 +109,4 @@
 
     };
 
-})();
+})();
