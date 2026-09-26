@@ -95,9 +95,6 @@
         "b423fa8a38361e5df2a59c8a50e839d0": {
             "text": "Die Differenz zwischen dem Start- und Enddaten muss weniger als 1 Jahr betragen, wenn Sie die j\u00e4hrliche Wiederholung aktiviert haben."
         },
-        "d97b48dfaca8afc9b65b0dea88848a19": {
-            "text": "Der Schneefall ist deaktiviert, weil Sie Fehler in Ihren Einstellungen haben."
-        },
         "1ebe9114e17ff1a4f70c0cd049b97966": {
             "text": "Aktivierung\/Deaktivierung des Schneefalls"
         },
@@ -148,6 +145,9 @@
         },
         "cbcd4100e3b22f8853a78873e01e0664": {
             "text": "Maximale Gr\u00f6\u00dfe der Schneeflocken (in em)"
+        },
+        "602a3df0fe4bc7caf563d95a2be2b570": {
+            "text": "Die vorherigen Termine wurden beibehalten."
         }
     }
 }
