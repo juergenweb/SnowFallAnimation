@@ -1,16 +1,16 @@
-# SnowfallAnimation
+# SnowFallAnimation
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![ProcessWire 3](https://img.shields.io/badge/ProcessWire-3.x-orange.svg)](https://github.com/processwire/processwire)
 
-A simple module for ProcessWire to create and animate snowflakes on a web page with an HTML5 canvas to add some winter
-magic to your project.
+A simple module for ProcessWire to create and animate snowflakes on a web page to add some winter magic to your
+project.
 
 ![Snowfall demo](https://github.com/juergenweb/SnowfallAnimation/blob/main/images/snowfall-demo.png?raw=true)
 
-This module is based on the nice JavaScript library of [ddosnotification](https://github.com/ddosnotification) and can be found [here](https://github.com/ddosnotification/snow-theme).
+This module is based on the nice JavaScript library by [ddosnotification](https://github.com/ddosnotification), which can be found [here](https://github.com/ddosnotification/snow-theme).
 
 ## Highlights
-* Lightweight - Under 1kb minified
+* Lightweight - Under 2 KB minified
 * Fully Responsive - Works perfectly on all devices and screen sizes
 * Zero Dependencies - Pure JavaScript, no external libraries required
 * Highly Customizable - Easy to adjust snowfall density, speed, size, and more
@@ -18,16 +18,16 @@ This module is based on the nice JavaScript library of [ddosnotification](https:
 * Safe to Use - Non-intrusive design, won't interfere with page interactions
 * Cross-Browser Compatible - Works on all modern browsers
 * Support for RockLanguage
-* German Translations included
+* German translation included
 
 ## Configuration settings
 1. Set the number of snowflakes on the page
 2. Set a minimum and maximum size for the snowflakes
-3. Set the color for the snowflakes 
-4. Set a minimum and maximum speed for the falling snowflakes
-5. Change the text (snowflakes icon) for the canvas if needed
+3. Set the color for the snowflakes
+4. Set a minimum and maximum fall duration for the snowflakes
+5. Change the text (snowflake icons) if needed
 6. Enable/disable snowfall by setting a start and end date
-7. Enable annual recurrences to start and end snowfall on the same date each year (no need to take care any longer).
+7. Enable annual recurrence to start and end the snowfall on the same dates each year (no need to take care of it any longer).
 
 ## Requirements
 * PHP>=8.0.0
@@ -42,7 +42,7 @@ Download the module folder and extract it under site/modules.
 
 Make sure that the extracted folder is named SnowFallAnimation and not SnowFallAnimation-main or some other name.
 
-Refresh the modules and install the module via the Backend.
+Refresh the modules and install the module via the backend.
 
 ### Installation via ProcessWire backend (recommended)
 
@@ -53,20 +53,21 @@ Install the module as usual from the modules directory via the PW backend.
 Go to the module configuration page of this module in the backend and start the snowfall manually or set a start and end
 date to activate or deactivate the snowfall on a timed basis.
 
-If you are not satisfied with the default settings, you can make your changes inside the *Styles and settings* configuration
-section.
+If you are not satisfied with the default settings, you can make your changes inside the *Styling and settings for the snowflakes*
+configuration section.
 
 ## Annual recurrence for activation/deactivation
 
-This module uses LazyCron, which runs once a day, to check if the end date for snowfall has already passed.
+This module uses LazyCron, which runs once a day, to check if the end date for the snowfall has already passed.
 
-If so, LazyCron stores the new date (= old date plus 1 year) in the database.
+If so, LazyCron moves the start and end date forward by one year (or by several years, if the end date lies further
+in the past) and stores the new dates in the database.
 
-Just to mention: This only happens if annual recurrence is enabled.
+Please note: this only happens if annual recurrence is enabled.
 
-## Changing the date format displayed
+## Changing the displayed date format
 
-By default, this module uses the date format "Y-m-d" for the two date pickers, as well as the status text at the top.
+By default, this module uses the date format "Y-m-d" for the two date pickers, as well as for the status text at the top.
 
 If you want to use a different date format, such as "d.m.Y", you can change the format within the language file for this
 module because the format is saved as a translatable string.
@@ -74,6 +75,3 @@ module because the format is saved as a translatable string.
 ## License
 
 MIT License - feel free to use in both personal and commercial projects.
-
-
-
