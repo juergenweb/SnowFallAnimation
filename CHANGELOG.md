@@ -24,6 +24,7 @@ All notable changes to this project will be documented in this file.
 - Unit tests for PHP (PHPUnit) and JavaScript (Vitest) in the tests folder
 
 ### Changed
+- Status message in the module configuration is shown as a coloured alert box (green: active, blue: scheduled, grey: off)
 - License changed to MIT (LICENSE.md), matching the README
 - Config is passed via a data-config attribute instead of an inline script (works with a strict Content-Security-Policy)
 - Config values are read the ProcessWire way (no TypeErrors with strict_types)

@@ -118,6 +118,39 @@ class ConfigInputfieldsTest extends ModuleTestCase
         $this->assertStringContainsString('inactive', $this->statusText($form));
     }
 
+    // ---------- alert box ----------
+
+    public function testActiveStateIsAGreenAlert(): void
+    {
+        $html = $this->statusText($this->form(['input_visibility' => '1']));
+        $this->assertStringContainsString('class="uk-alert uk-alert-success snowfall-state active"', $html);
+        $this->assertStringContainsString('fa-check-circle', $html);
+    }
+
+    public function testScheduledStateIsABlueAlert(): void
+    {
+        $html = $this->statusText($this->form(['input_visibility' => '2', 'input_start' => $this->ts('2026-12-01')]));
+        $this->assertStringContainsString('class="uk-alert uk-alert-primary snowfall-state inactive"', $html);
+        $this->assertStringContainsString('fa-clock-o', $html);
+    }
+
+    public function testOffStateIsANeutralAlert(): void
+    {
+        foreach ([['input_visibility' => '0'], ['input_visibility' => '2', 'input_end' => $this->ts('2026-06-01')]] as $config) {
+            $html = $this->statusText($this->form($config));
+            $this->assertStringContainsString('class="uk-alert snowfall-state inactive"', $html);
+            $this->assertStringContainsString('fa-times-circle', $html);
+        }
+    }
+
+    public function testStatusTextIsEscaped(): void
+    {
+        // the text is translatable - HTML in a translation must not be rendered
+        $html = $this->statusText($this->form(['input_visibility' => '1']));
+        $this->assertStringNotContainsString('<p', $html);
+        $this->assertStringContainsString('role="status"', $html);
+    }
+
     // ---------- openFieldset() ----------
 
     private function renderFieldset(Inputfield $fieldset): void
