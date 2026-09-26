@@ -390,7 +390,7 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
         // Markup element to indicate whether the snowfall is active or not
         $markup = $this->wire('modules')->get('InputfieldMarkup');
 
-        // state: active (green), scheduled (blue) or off (neutral)
+        // state: active (green), scheduled (yellow) or off (red)
         $scheduled = false;
 
         switch ((int)$this->input_visibility) {
@@ -426,10 +426,10 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
             $alertClass = 'uk-alert-success';
             $icon = 'fa-check-circle';
         } elseif ($scheduled) {
-            $alertClass = 'uk-alert-primary';
+            $alertClass = 'uk-alert-warning';
             $icon = 'fa-clock-o';
         } else {
-            $alertClass = '';
+            $alertClass = 'uk-alert-danger';
             $icon = 'fa-times-circle';
         }
         $markup->addClass('uk-text-large');

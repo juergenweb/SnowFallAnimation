@@ -127,18 +127,18 @@ class ConfigInputfieldsTest extends ModuleTestCase
         $this->assertStringContainsString('fa-check-circle', $html);
     }
 
-    public function testScheduledStateIsABlueAlert(): void
+    public function testScheduledStateIsAYellowAlert(): void
     {
         $html = $this->statusText($this->form(['input_visibility' => '2', 'input_start' => $this->ts('2026-12-01')]));
-        $this->assertStringContainsString('class="uk-alert uk-alert-primary snowfall-state inactive"', $html);
+        $this->assertStringContainsString('class="uk-alert uk-alert-warning snowfall-state inactive"', $html);
         $this->assertStringContainsString('fa-clock-o', $html);
     }
 
-    public function testOffStateIsANeutralAlert(): void
+    public function testOffStateIsARedAlert(): void
     {
         foreach ([['input_visibility' => '0'], ['input_visibility' => '2', 'input_end' => $this->ts('2026-06-01')]] as $config) {
             $html = $this->statusText($this->form($config));
-            $this->assertStringContainsString('class="uk-alert snowfall-state inactive"', $html);
+            $this->assertStringContainsString('class="uk-alert uk-alert-danger snowfall-state inactive"', $html);
             $this->assertStringContainsString('fa-times-circle', $html);
         }
     }
