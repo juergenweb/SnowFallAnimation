@@ -1,7 +1,8 @@
 # Files and folders that are not included in the release archives (git archive / GitHub zip downloads)
 
-# Tests (PHPUnit and Vitest)
+# Tests (PHPUnit, Vitest and WireTests)
 /tests export-ignore
+/SnowFallAnimation.test.php export-ignore
 
 # Composer files for the test tools
 /vendor export-ignore

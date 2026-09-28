@@ -22,6 +22,8 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Unit tests for PHP (PHPUnit) and JavaScript (Vitest) in the tests folder
+- Browser tests with Playwright (tests/e2e): snowflakes appear, fall, use the configured color, symbols, density and z-index, do not block clicks
+- WireTests for the live environment (SnowFallAnimation.test.php): hooks, config validation, recurrence, frontend output, config form and web server access rules
 
 ### Changed
 - Status message in the module configuration is shown as a coloured alert box (green: active, yellow: scheduled, red: off)

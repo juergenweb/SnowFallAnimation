@@ -1,12 +1,14 @@
 {
   "name": "snowfallanimation-tests",
   "private": true,
-  "description": "JavaScript tests for the SnowFallAnimation ProcessWire module",
+  "description": "JavaScript and browser tests for the SnowFallAnimation ProcessWire module",
   "type": "module",
   "scripts": {
-    "test": "vitest run js"
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
+    "@playwright/test": "^1.50.0",
     "jsdom": "^26.0.0",
     "vitest": "^3.0.0"
   }
