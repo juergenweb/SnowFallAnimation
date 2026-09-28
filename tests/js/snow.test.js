@@ -33,6 +33,28 @@ function runScript(file, config = null) {
 
 const flakes = (container) => [...container.querySelectorAll('.snowflake')];
 
+/**
+ * Simulate the "reduce motion" setting (jsdom has no matchMedia)
+ * @param {boolean} matches true = the user wants reduced motion
+ * @param {boolean} legacy true = only the old addListener() API (older Safari)
+ */
+function mockReducedMotion(matches, legacy = false) {
+    const listeners = [];
+    const mql = { matches, media: '(prefers-reduced-motion: reduce)' };
+    if (legacy) {
+        mql.addListener = (fn) => listeners.push(fn);
+    } else {
+        mql.addEventListener = (type, fn) => { if (type === 'change') listeners.push(fn); };
+    }
+    window.matchMedia = vi.fn((query) => (query === mql.media ? mql : { matches: false, media: query }));
+    return {
+        change(value) {
+            mql.matches = value;
+            listeners.forEach((fn) => fn({ matches: value, media: mql.media }));
+        },
+    };
+}
+
 describe.each(files)('%s', (file) => {
 
     beforeEach(() => {
@@ -45,6 +67,7 @@ describe.each(files)('%s', (file) => {
     afterEach(() => {
         vi.clearAllTimers();
         vi.useRealTimers();
+        delete window.matchMedia;
     });
 
     it('creates the container and the first 10 snowflakes', () => {
@@ -152,5 +175,75 @@ describe.each(files)('%s', (file) => {
             expect(duration).toBeGreaterThanOrEqual(3);
             expect(duration).toBeLessThanOrEqual(4);
         }
+    });
+    it('creates snowflakes if the user has not turned off animations', () => {
+        mockReducedMotion(false);
+        const container = runScript(file, { density: 20 });
+        vi.advanceTimersByTime(2000);
+        expect(flakes(container).length).toBeGreaterThan(0);
+    });
+
+    it('creates no snowflakes if the user wants reduced motion', () => {
+        mockReducedMotion(true);
+        const container = runScript(file, { density: 20 });
+        vi.advanceTimersByTime(5000);
+        expect(container).not.toBeNull();
+        expect(flakes(container)).toHaveLength(0);
+        expect(window.matchMedia).toHaveBeenCalledWith('(prefers-reduced-motion: reduce)');
+    });
+
+    it('stops and removes the snowflakes when reduced motion is turned on while the page is open', () => {
+        const media = mockReducedMotion(false);
+        const container = runScript(file, { density: 20 });
+        vi.advanceTimersByTime(1000);
+        expect(flakes(container).length).toBeGreaterThan(0);
+
+        media.change(true);
+        expect(flakes(container)).toHaveLength(0);
+        vi.advanceTimersByTime(5000);
+        expect(flakes(container)).toHaveLength(0);
+    });
+
+    it('starts the snowfall when reduced motion is turned off while the page is open', () => {
+        const media = mockReducedMotion(true);
+        const container = runScript(file, { density: 20 });
+        vi.advanceTimersByTime(1000);
+        expect(flakes(container)).toHaveLength(0);
+
+        media.change(false);
+        vi.advanceTimersByTime(1000);
+        expect(flakes(container).length).toBeGreaterThan(0);
+    });
+
+    it('starts only once even if the setting changes to "no preference" several times', () => {
+        const media = mockReducedMotion(false);
+        const setIntervalSpy = vi.spyOn(globalThis, 'setInterval');
+        runScript(file, { density: 20 });
+        media.change(false);
+        media.change(false);
+        expect(setIntervalSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('supports the old addListener() API of older browsers', () => {
+        const media = mockReducedMotion(false, true);
+        const container = runScript(file, { density: 20 });
+        vi.advanceTimersByTime(1000);
+        media.change(true);
+        expect(flakes(container)).toHaveLength(0);
+    });
+
+    it('works without matchMedia (very old browsers)', () => {
+        delete window.matchMedia;
+        const container = runScript(file);
+        expect(flakes(container)).toHaveLength(10);
+    });
+
+    it('exposes start() and stop() in window.SnowTheme', () => {
+        mockReducedMotion(false);
+        const container = runScript(file, { density: 20 });
+        window.SnowTheme.stop();
+        expect(flakes(container)).toHaveLength(0);
+        window.SnowTheme.start();
+        expect(flakes(container)).toHaveLength(10);
     });
 });

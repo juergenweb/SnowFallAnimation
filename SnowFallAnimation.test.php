@@ -33,6 +33,9 @@ class WireTest_SnowFallAnimation extends WireTest {
 	/** original $input->get->name value */
 	protected $originalInputName = null;
 
+	/** language changed by the test (to be reset in finish()) */
+	protected $languageChanged = false;
+
 	/** notices that existed before the test (to remove the ones we create) */
 	protected $noticeCount = 0;
 
@@ -72,6 +75,8 @@ class WireTest_SnowFallAnimation extends WireTest {
 		$this->testConfigForm();
 		$this->testStatusAlert();
 		$this->testOpenFieldset();
+		$this->testTranslations();
+		$this->testUpgradeFrom100();
 		$this->testHttpAccess();
 	}
 
@@ -105,6 +110,10 @@ class WireTest_SnowFallAnimation extends WireTest {
 			$session->set('snowfalldateserror', $this->originalSessionFlag);
 		}
 		$this->wire()->input->get->set('name', $this->originalInputName);
+		if($this->languageChanged && $this->wire()->languages) {
+			$this->wire()->languages->unsetLanguage();
+			$this->languageChanged = false;
+		}
 
 		// remove the error notices created by the validation tests
 		$notices = $this->wire()->notices;
@@ -415,6 +424,145 @@ class WireTest_SnowFallAnimation extends WireTest {
 	}
 
 	/**
+	 * Translations: every text of the module is translated, and the status message and the date format
+	 * are shown in the language of the user (only for languages with a translation file for this module)
+	 */
+	protected function testTranslations() {
+		$modules = $this->wire()->modules;
+		$languages = $this->wire()->languages;
+		if(!$modules->isInstalled('LanguageSupport') || !$languages) {
+			$this->li('Translations: skipped - LanguageSupport is not installed');
+			return;
+		}
+
+		$file = $this->wire()->config->paths('SnowFallAnimation') . 'SnowFallAnimation.module';
+		$texts = $this->getTranslatableTexts($file);
+		$this->check('Translations: translatable texts found in the module', 0, count($texts), '<');
+
+		$tested = 0;
+		foreach($languages as $language) {
+			if($language->isDefault()) continue;
+			$name = $language->name;
+			$translator = $language->translator();
+			$textdomain = $translator->filenameToTextdomain($file);
+			if(!$translator->textdomainFileExists($textdomain)) {
+				$this->li("Translations: language '$name' has no translation for this module - skipped");
+				continue;
+			}
+			$tested++;
+
+			// every text has a translation
+			$missing = [];
+			foreach($texts as $text) {
+				$translation = $translator->getTranslationOrFalse($textdomain, $text);
+				if($translation === false || $translation === '') $missing[] = $text;
+			}
+			$this->check("Translations ($name): all " . count($texts) . ' texts are translated', [], $missing);
+
+			// no outdated translations (texts that do not exist in the module anymore)
+			$hashes = [];
+			// same hash as LanguageTranslator::getTextHash() (protected)
+			foreach($texts as $text) $hashes[md5(str_replace('\\n', "\n", $text))] = true;
+			$outdated = array_values(array_diff_key($translator->getTranslations($textdomain), $hashes));
+			$this->check("Translations ($name): no outdated translations", 0, count($outdated));
+
+			// status message and date format in the language of the user
+			$languages->setLanguage($language);
+			$this->languageChanged = true;
+			try {
+				$format = $translator->getTranslation($textdomain, 'Y-m-d');
+				$this->check("Translations ($name): date format", $format, $this->module->_('Y-m-d'));
+
+				$this->setVisibility('2', '-5 days', '+10 days');
+				$end = new \DateTime('today +10 days');
+				$expected = sprintf($translator->getTranslation($textdomain, 'At the moment the snowfall is enabled. It will be disabled on %s.'), $end->format($format));
+				$this->check("Translations ($name): status message with translated text and date format", htmlspecialchars($expected, ENT_QUOTES, 'UTF-8'), $this->renderStatus(), '*=');
+
+				$form = $this->wire()->modules->getModuleConfigInputfields('SnowFallAnimation');
+				$field = $form ? $form->getChildByName('input_end') : null;
+				$this->check("Translations ($name): date picker uses the translated date format", $format, $field ? (string) $field->dateInputFormat : '');
+			} finally {
+				$languages->unsetLanguage();
+				$this->languageChanged = false;
+			}
+		}
+		if(!$tested) $this->li('Translations: no language with a translation file for this module');
+	}
+
+	/**
+	 * Upgrade from version 1.0.0: the config saved by 1.0.0 (old defaults, no z-index, dates of the last season)
+	 * must work without errors, and the new limits and the recurrence must be applied
+	 */
+	protected function testUpgradeFrom100() {
+		$modules = $this->wire()->modules;
+		$start = new \DateTime('today -300 days');
+		$end = new \DateTime('today -270 days');
+
+		// config as stored by version 1.0.0 (the z-index field was missing in the form, so there is no input_zIndex)
+		$old = [
+			'input_count' => 500,
+			'input_minRadius' => 0.8,
+			'input_maxRadius' => 1.5,
+			'input_minSpeed' => 1,
+			'input_maxSpeed' => 3,
+			'input_text' => '❄',
+			'input_color' => '#99ccff',
+			'input_visibility' => '2',
+			'input_start' => $start->getTimestamp(),
+			'input_end' => $end->getTimestamp(),
+			'input_recurrence' => 1,
+		];
+		$configs = $modules->configs;
+		if($configs && method_exists($configs, 'saveConfig')) {
+			$configs->saveConfig('SnowFallAnimation', $old); // as it is in the database (without validation)
+		} else {
+			$modules->saveConfig('SnowFallAnimation', $old);
+		}
+
+		// load the old config into the module like ProcessWire does (missing keys keep their defaults)
+		foreach(SnowFallAnimation::getDefaultConfig() as $key => $value) {
+			$this->module->set($key, array_key_exists($key, $old) ? $old[$key] : $value);
+		}
+		$this->setProperty('today', new \DateTime('today'));
+		$this->setProperty('dateStart', $this->callMethod('toDate', $old['input_start']));
+		$this->setProperty('dateEnd', $this->callMethod('toDate', $old['input_end']));
+
+		// the JavaScript config works with the old values
+		$js = $this->callMethod('getJsConfig');
+		$this->check('Upgrade 1.0.0: density 500 is kept (below the limit)', 500, $js['density']);
+		$this->check('Upgrade 1.0.0: old fall duration 1-3 s is kept', [1, 3], [$js['minDuration'], $js['maxDuration']]);
+		$this->check('Upgrade 1.0.0: missing z-index uses the default', 1000, $js['zIndex']);
+
+		// the season is over -> no snowfall
+		$html = '<html><head></head><body><p>Test</p></body></html>';
+		$this->check('Upgrade 1.0.0: no snowfall after the end date of last season', $html, $this->renderWithHook($html, $this->wire()->pages->get('/')));
+
+		// config form works with the old config
+		$form = $modules->getModuleConfigInputfields('SnowFallAnimation');
+		$zIndex = $form ? $form->getChildByName('input_zIndex') : null;
+		$this->check('Upgrade 1.0.0: config form shows the default z-index', '1000', $zIndex ? (string) $zIndex->attr('value') : '');
+
+		// LazyCron moves the dates of last season to this season, the other old values are kept
+		$this->callMethod('generateDates', $this->wire(new HookEvent()));
+		$data = $this->configFromDatabase();
+		$this->check('Upgrade 1.0.0: start date moved to this season', (clone $start)->modify('+1 year')->format('Y-m-d'), date('Y-m-d', (int) ($data['input_start'] ?? 0)));
+		$this->check('Upgrade 1.0.0: end date moved to this season', (clone $end)->modify('+1 year')->format('Y-m-d'), date('Y-m-d', (int) ($data['input_end'] ?? 0)));
+		$this->check('Upgrade 1.0.0: other old values are kept', 500, (int) ($data['input_count'] ?? 0), '==');
+
+		// saving the form once (as the admin does after the upgrade) works and stores the z-index
+		$modules->saveConfig('SnowFallAnimation', array_merge($data, ['input_zIndex' => '1000']));
+		$saved = $modules->getConfig('SnowFallAnimation');
+		$this->check('Upgrade 1.0.0: first save after the upgrade stores the z-index', '1000', (string) ($saved['input_zIndex'] ?? ''));
+		$this->check('Upgrade 1.0.0: first save keeps the moved dates', (int) $data['input_end'], (int) ($saved['input_end'] ?? 0), '==');
+
+		// values stored as strings (e.g. by older ProcessWire versions) are converted
+		$this->module->set('input_count', '500');
+		$this->module->set('input_minRadius', '0.8');
+		$js = $this->callMethod('getJsConfig');
+		$this->check('Upgrade 1.0.0: numeric strings are converted', [500, 0.8], [$js['density'], $js['minSize']]);
+	}
+
+	/**
 	 * Web server access rules (only if the site is reachable via HTTP from here)
 	 */
 	protected function testHttpAccess() {
@@ -494,6 +642,27 @@ class WireTest_SnowFallAnimation extends WireTest {
 		$event = $this->wire(new HookEvent(['object' => $page, 'method' => 'render', 'return' => $html]));
 		$this->callMethod('addScript', $event);
 		return $event->return;
+	}
+
+	/**
+	 * Get all texts of the module that are translatable with $this->_('...')
+	 */
+	protected function getTranslatableTexts($file) {
+		$texts = [];
+		if(preg_match_all('/\$this->_\(\s*\'((?:[^\'\\\\]|\\\\.)*)\'\s*\)/', (string) file_get_contents($file), $matches)) {
+			foreach($matches[1] as $text) $texts[] = stripcslashes($text);
+		}
+		return array_values(array_unique($texts));
+	}
+
+	/**
+	 * Render the status message of the config form
+	 */
+	protected function renderStatus() {
+		$wrapper = $this->wire(new InputfieldWrapper());
+		$this->module->getModuleConfigInputfields($wrapper);
+		$markup = $wrapper->children()->first();
+		return $markup ? $markup->render() : '';
 	}
 
 	protected function lastNoticeText() {

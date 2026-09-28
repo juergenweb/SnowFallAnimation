@@ -387,6 +387,9 @@ class SnowFallAnimation extends WireData implements Module, ConfigurableModule
     public function getModuleConfigInputfields(InputfieldWrapper $inputfields): void
     {
 
+        // date format in the language of the current user (the language may have changed since init())
+        $this->dateFormat = $this->_('Y-m-d');
+
         // Markup element to indicate whether the snowfall is active or not
         $markup = $this->wire('modules')->get('InputfieldMarkup');
 

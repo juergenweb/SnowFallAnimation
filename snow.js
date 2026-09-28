@@ -76,14 +76,26 @@
         setTimeout(() => snowflake.remove(), duration * 1000);
     }
 
+    let timer = null;
+
     // Start snowfall effect
     function startSnowfall() {
+        if (timer !== null) return; // already running
 
         // Create initial batch
         for (let i = 0; i < 10; i++) createSnowflake();
-        
+
         // Continue creating snowflakes
-        setInterval(createSnowflake, config.interval);
+        timer = setInterval(createSnowflake, config.interval);
+    }
+
+    // Stop snowfall effect and remove all snowflakes
+    function stopSnowfall() {
+        if (timer !== null) {
+            clearInterval(timer);
+            timer = null;
+        }
+        container.replaceChildren();
     }
 
     // Handle window resize
@@ -96,8 +108,19 @@
         }
     });
 
-    // Start the effect
-    startSnowfall();
+    // Start the effect - but respect the "reduce motion" setting of the operating system/browser
+    // (people who have turned off animations, e.g. because of vestibular disorders, do not get any snowflakes)
+    const reducedMotion = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    const updateSnowfall = () => (reducedMotion && reducedMotion.matches ? stopSnowfall() : startSnowfall());
+    if (reducedMotion) {
+        // react if the setting is changed while the page is open
+        if (typeof reducedMotion.addEventListener === 'function') {
+            reducedMotion.addEventListener('change', updateSnowfall);
+        } else if (typeof reducedMotion.addListener === 'function') {
+            reducedMotion.addListener(updateSnowfall); // older Safari versions
+        }
+    }
+    updateSnowfall();
 
     // Expose configuration to window for customization
     window.SnowTheme = {
@@ -105,8 +128,9 @@
         container: container,
         wind: config.wind,
         start: startSnowfall,
+        stop: stopSnowfall,
         createSnowflake: createSnowflake,
 
     };
 
-})();
+})();

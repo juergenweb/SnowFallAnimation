@@ -10,12 +10,13 @@ project.
 This module is based on the nice JavaScript library by [ddosnotification](https://github.com/ddosnotification), which can be found [here](https://github.com/ddosnotification/snow-theme).
 
 ## Highlights
-* Lightweight - Under 2 KB minified
+* Lightweight - About 2 KB minified
 * Fully Responsive - Works perfectly on all devices and screen sizes
 * Zero Dependencies - Pure JavaScript, no external libraries required
 * Highly Customizable - Easy to adjust snowfall density, speed, size, and more
 * Performance Optimized - Automatic cleanup and limited concurrent snowflakes
 * Safe to Use - Non-intrusive design, won't interfere with page interactions
+* Accessible - Respects the "reduce motion" setting of the operating system (no snowflakes for people who turned off animations)
 * Cross-Browser Compatible - Works on all modern browsers
 * Support for RockLanguage
 * German translation included

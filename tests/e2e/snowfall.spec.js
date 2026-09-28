@@ -80,14 +80,37 @@ test.describe('SnowFallAnimation', () => {
     test('snowflakes fall down (animation is running)', async ({ page }) => {
         const { config } = await openPage(page);
         test.skip(config.density === 0, 'Density is 0 - no snowflakes expected');
+        await expect(page.locator('#snow-container .snowflake').first()).toBeAttached({ timeout: 3000 });
+        await page.waitForTimeout(500);
 
-        const flake = page.locator('#snow-container .snowflake').first();
-        await expect(flake).toBeAttached({ timeout: 3000 });
-        const y1 = await flake.evaluate((el) => el.getBoundingClientRect().top);
-        await page.waitForTimeout(700);
-        const y2 = await flake.evaluate((el) => el.isConnected ? el.getBoundingClientRect().top : null);
-        test.skip(y2 === null, 'Snowflake was removed in the meantime');
-        expect(y2, 'snowflake moved down').toBeGreaterThan(y1);
+        // Measure the SAME elements twice (a Playwright locator would find a different snowflake
+        // if the first one was removed in the meantime). Only snowflakes in the upper half of the
+        // viewport are used: they cannot reach the bottom and restart the animation within 300 ms
+        // (fastest fall: 1 s for the whole viewport). The center is used, because the rotation of
+        // the snowflake changes its top edge.
+        const measure = () => page.evaluate(async () => {
+            const centerY = (el) => {
+                const r = el.getBoundingClientRect();
+                return (r.top + r.bottom) / 2;
+            };
+            const start = [...document.querySelectorAll('#snow-container .snowflake')]
+                .map((el) => ({ el, y: centerY(el) }))
+                .filter((f) => f.y > 0 && f.y < innerHeight / 2);
+            await new Promise((resolve) => setTimeout(resolve, 300));
+            const checked = start.filter((f) => f.el.isConnected);
+            const notMoved = checked.filter((f) => centerY(f.el) <= f.y).map((f) => f.y);
+            return { checked: checked.length, notMoved };
+        });
+
+        // try several times until snowflakes are visible in the upper half of the viewport
+        let result = await measure();
+        for (let attempt = 1; attempt < 10 && result.checked === 0; attempt++) {
+            await page.waitForTimeout(300);
+            result = await measure();
+        }
+
+        expect(result.checked, 'visible snowflakes in the upper half of the viewport (animation running?)').toBeGreaterThan(0);
+        expect(result.notMoved, 'snowflakes that did not move down (start positions)').toEqual([]);
     });
 
     test('number of snowflakes never exceeds the density', async ({ page }) => {
@@ -150,5 +173,33 @@ test.describe('SnowFallAnimation', () => {
             return withSnow - withoutSnow;
         });
         expect(overflow, 'additional horizontal overflow caused by the snowflakes (px)').toBeLessThanOrEqual(0);
+    });
+});
+
+test.describe('SnowFallAnimation with "reduce motion" setting', () => {
+
+    test('no snowflakes if the user wants reduced motion', async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        const { errors } = await openPage(page);
+        await page.waitForTimeout(2000);
+
+        await expect(page.locator('#snow-container')).toBeAttached();
+        expect(await page.locator('#snow-container .snowflake').count(), 'snowflakes with reduced motion').toBe(0);
+        expect(errors, 'JavaScript errors in the console').toEqual([]);
+    });
+
+    test('snowflakes disappear when reduced motion is turned on, and come back when it is turned off', async ({ page }) => {
+        const { config } = await openPage(page);
+        test.skip(config.density === 0, 'Density is 0 - no snowflakes expected');
+        const flakes = page.locator('#snow-container .snowflake');
+        await expect(flakes.first()).toBeAttached({ timeout: 3000 });
+
+        await page.emulateMedia({ reducedMotion: 'reduce' });
+        await expect(flakes).toHaveCount(0, { timeout: 2000 });
+        await page.waitForTimeout(1500);
+        await expect(flakes).toHaveCount(0);
+
+        await page.emulateMedia({ reducedMotion: 'no-preference' });
+        await expect(flakes.first()).toBeAttached({ timeout: 3000 });
     });
 });

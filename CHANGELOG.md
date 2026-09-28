@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Config is passed to the script before it starts (first snowflakes used default values, z-index was ignored)
 - Density setting is now reachable (creation interval is derived from density and duration)
 - JavaScript is cached again (no more time() in the version parameter)
+- Date format of the status message and the date pickers always uses the language of the current user
 
 ### Security
 - Snowflake symbols are inserted as text (textContent) instead of HTML (prevents stored XSS)
@@ -21,9 +22,10 @@ All notable changes to this project will be documented in this file.
 - Upper limits for density (1000), size (10 em) and duration (120 s) to protect the visitors' browsers
 
 ### Added
+- Snowfall respects the "reduce motion" setting (prefers-reduced-motion): no snowflakes for people who turned off animations, also when the setting is changed while the page is open
 - Unit tests for PHP (PHPUnit) and JavaScript (Vitest) in the tests folder
 - Browser tests with Playwright (tests/e2e): snowflakes appear, fall, use the configured color, symbols, density and z-index, do not block clicks
-- WireTests for the live environment (SnowFallAnimation.test.php): hooks, config validation, recurrence, frontend output, config form and web server access rules
+- WireTests for the live environment (SnowFallAnimation.test.php): hooks, config validation, recurrence, frontend output, config form, translations, upgrade from 1.0.0 and web server access rules
 
 ### Changed
 - Status message in the module configuration is shown as a coloured alert box (green: active, yellow: scheduled, red: off)

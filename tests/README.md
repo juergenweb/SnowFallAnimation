@@ -56,6 +56,7 @@ rebuilt after every change of `snow.js`.
 - the number of snowflakes never exceeds the configured density
 - the container is fixed, uses the configured z-index and does not catch clicks
 - the snowflakes do not block clicks on the page and do not cause a horizontal scrollbar
+- no snowflakes with the "reduce motion" setting, and they disappear/come back when the setting is changed
 
 The snowfall must be active on the tested page (module config: "On"). Otherwise all tests are skipped.
 
@@ -96,6 +97,9 @@ What is tested:
 - Yearly recurrence (1 year and several years)
 - Frontend output on the real home page, and no output when off, on admin pages or outside the date range
 - Config form, status alert colors and opening of the fieldset after an error
+- Translations (for every language with a translation file for this module): all texts translated, no
+  outdated translations, status message and date format in the language of the user
+- Upgrade from 1.0.0: old config (old defaults, no z-index, dates of last season) works, dates are moved
 - Web server rules: `.module`, test files and `tests/` must return 403 (skipped if the site is not
   reachable via HTTP from the command line)
 
